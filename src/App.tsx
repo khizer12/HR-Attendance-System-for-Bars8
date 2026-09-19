@@ -12,6 +12,7 @@ import Reports from '@/pages/Reports';
 import Schedule from '@/pages/Schedule';
 import Settings from '@/pages/Settings';
 import Unauthorized from '@/pages/Unauthorized';
+import EmployeeDetail from '@/pages/EmployeeDetail';
 
 export default function App() {
   return (
@@ -36,11 +37,20 @@ export default function App() {
             <Route path="schedule" element={<Schedule />} />
 
             {/* Admin-only pages */}
+                         {/* Admin-only pages */}
             <Route
               path="employees"
               element={
                 <ProtectedRoute allowRoles={['super_admin', 'sub_admin']}>
                   <Employees />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="employees/:id"
+              element={
+                <ProtectedRoute allowRoles={['super_admin', 'sub_admin']}>
+                  <EmployeeDetail />
                 </ProtectedRoute>
               }
             />

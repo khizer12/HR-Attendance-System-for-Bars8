@@ -50,7 +50,7 @@ export function Sidebar({ onNavigate }: SidebarProps) {
                 )
               }
             >
-                    <span
+                <span
                 aria-hidden="true"
                 className="w-4 text-center text-base transition-transform duration-150 group-hover:scale-110"
               >
