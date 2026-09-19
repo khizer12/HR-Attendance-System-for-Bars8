@@ -52,7 +52,7 @@ export function Header({ onOpenMobileNav, title }: HeaderProps) {
           aria-haspopup="menu"
           aria-expanded={menuOpen}
           aria-label="Open user menu"
-          className="h-9 w-9 rounded-full bg-charcoal-3 flex items-center justify-center text-xs font-medium text-off-white hover:bg-charcoal-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lime transition-colors"
+                    className="h-9 w-9 rounded-full bg-charcoal-3 flex items-center justify-center text-xs font-medium text-off-white hover:bg-charcoal-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lime transition-all duration-150 active:scale-95"
         >
           {initials}
         </button>
@@ -65,10 +65,11 @@ export function Header({ onOpenMobileNav, title }: HeaderProps) {
               className="fixed inset-0 z-30"
               onClick={() => setMenuOpen(false)}
             />
-            <div
+                        <div
               role="menu"
               className={cn(
                 'absolute right-0 top-full mt-2 z-40 w-56 rounded-lg bg-charcoal-2 border border-charcoal-3 shadow-lg overflow-hidden',
+                'animate-dropdown-in origin-top-right',
               )}
             >
               {profile && (

@@ -145,4 +145,65 @@
       linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
     background-size: 32px 32px;
   }
+
+    /* Page transition — used when routes change */
+  @keyframes page-in {
+    from {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-page-in {
+    animation: page-in 220ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  /* Dropdown / menu entrance */
+  @keyframes dropdown-in {
+    from {
+      opacity: 0;
+      transform: translateY(-4px) scale(0.98);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  .animate-dropdown-in {
+    animation: dropdown-in 140ms ease-out;
+  }
+
+  /* Fade in — used by loading states and empty states */
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  .animate-fade-in {
+    animation: fade-in 180ms ease-out;
+  }
+
+  /* Subtle pulse for skeleton loaders */
+  @keyframes skeleton-pulse {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.55;
+    }
+  }
+
+  .animate-skeleton {
+    animation: skeleton-pulse 1.6s ease-in-out infinite;
+  }
 }

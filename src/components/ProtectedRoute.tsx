@@ -15,15 +15,17 @@ export function ProtectedRoute({ children, allowRoles }: ProtectedRouteProps) {
 
   // While the initial session/profile is loading, keep the shell mounted
   // so we don't flash the login page on refresh.
-  if (loading) {
+    if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-near-black">
-        <div className="flex flex-col items-center gap-3">
+      <div className="min-h-screen flex items-center justify-center bg-near-black animate-fade-in">
+        <div className="flex flex-col items-center gap-4">
           <div
             aria-hidden="true"
-            className="h-6 w-6 animate-spin rounded-full border-2 border-lime border-t-transparent"
+            className="h-8 w-8 animate-spin rounded-full border-2 border-lime border-t-transparent"
           />
-          <p className="text-xs text-muted-gray">Loading…</p>
+          <p className="text-xs text-muted-gray tracking-wide uppercase">
+            Loading
+          </p>
         </div>
       </div>
     );

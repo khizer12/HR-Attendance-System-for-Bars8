@@ -39,17 +39,21 @@ export function Sidebar({ onNavigate }: SidebarProps) {
             <NavLink
               to={item.to}
               onClick={onNavigate}
-              className={({ isActive }) =>
+                className={({ isActive }) =>
                 cn(
-                  'flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors',
+                  'group flex items-center gap-3 rounded-md px-3 py-2 text-sm',
+                  'transition-all duration-150 ease-out',
                   'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lime focus-visible:ring-offset-2 focus-visible:ring-offset-charcoal',
                   isActive
                     ? 'bg-charcoal-3 text-off-white font-medium'
-                    : 'text-muted-gray hover:text-off-white hover:bg-charcoal-2',
+                    : 'text-muted-gray hover:text-off-white hover:bg-charcoal-2 hover:translate-x-0.5',
                 )
               }
             >
-              <span aria-hidden="true" className="w-4 text-center text-base">
+                    <span
+                aria-hidden="true"
+                className="w-4 text-center text-base transition-transform duration-150 group-hover:scale-110"
+              >
                 {item.icon}
               </span>
               <span>{item.label}</span>

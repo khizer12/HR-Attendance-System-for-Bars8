@@ -15,7 +15,7 @@ function usePageTitle(): string {
 export function MainLayout() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const title = usePageTitle();
-
+  const { pathname } = useLocation();
   const closeMobile = () => setMobileOpen(false);
 
   return (
@@ -45,8 +45,10 @@ export function MainLayout() {
       <div className="flex-1 flex flex-col min-w-0">
         <Header onOpenMobileNav={() => setMobileOpen(true)} title={title} />
 
-        <main className="flex-1 overflow-y-auto bg-grid">
-          <Outlet />
+                <main className="flex-1 overflow-y-auto bg-grid">
+          <div key={pathname} className="animate-page-in">
+            <Outlet />
+          </div>
         </main>
       </div>
     </div>
