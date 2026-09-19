@@ -1,5 +1,6 @@
 import { useAuth } from '@/features/auth';
 import { useAttendance } from '@/features/attendance';
+import { AdminDashboard } from '@/features/admin';
 import {
   AttendanceHistory,
   QuickStats,
@@ -9,7 +10,25 @@ import {
 import { formatDateLong, greetingForNow } from '@/lib/time';
 
 export default function Dashboard() {
-  const { profile } = useAuth();
+  const { profile, isSuperAdmin, isSubAdmin } = useAuth();
+
+  // Admins and sub-admins see the team overview on /dashboard.
+  if (isSuperAdmin || isSubAdmin) {
+    return <AdminDashboard />;
+  }
+
+  return <EmployeeDashboard profile={profile} />;
+}
+
+/**
+ * The original employee view is preserved verbatim.
+ * Only path to it now is via the employee role.
+ */
+function EmployeeDashboard({
+  profile,
+}: {
+  profile: ReturnType<typeof useAuth>['profile'];
+}) {
   const attendance = useAttendance();
 
   const greeting = greetingForNow();

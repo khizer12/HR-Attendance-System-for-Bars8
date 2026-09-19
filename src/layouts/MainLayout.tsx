@@ -32,12 +32,12 @@ export function MainLayout() {
         />
       )}
 
-      <aside
+            <aside
         className={cn(
           'fixed inset-y-0 left-0 z-50 lg:hidden transition-transform duration-200 ease-out',
           mobileOpen ? 'translate-x-0' : '-translate-x-full',
         )}
-        aria-hidden={!mobileOpen}
+        inert={!mobileOpen}
       >
         <Sidebar onNavigate={closeMobile} />
       </aside>
