@@ -7,6 +7,7 @@ export interface AdminOverviewRow {
   email: string;
   full_name: string;
   role: Role;
+  department: string | null;
   state: AttendanceState;
   attendance_id: string | null;
   clock_in_at: string | null;

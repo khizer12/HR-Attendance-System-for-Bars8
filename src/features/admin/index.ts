@@ -8,3 +8,4 @@ export { filterRows, countByFilter } from '@/features/admin/filters';
 export type { AdminFilter } from '@/features/admin/filters';
 export { AdminTable } from '@/features/admin/AdminTable';
 export { AdminDashboard } from '@/features/admin/AdminDashboard';
+export { TodayRoster } from '@/features/admin/TodayRoster';

@@ -1,7 +1,12 @@
 import { useAuth } from '@/features/auth';
-import { SchedulesList, useSchedule } from '@/features/schedules';
+import { TodayRoster } from '@/features/admin';
+import {
+  SchedulesList,
+  formatTimeOfDay,
+  formatWorkingDays,
+  useSchedule,
+} from '@/features/schedules';
 import { Card, CardBody, CardHeader, CardTitle } from '@/components/ui/Card';
-import { formatTimeOfDay, formatWorkingDays } from '@/features/schedules';
 import { formatDateLong } from '@/lib/time';
 
 export default function Schedule() {
@@ -17,12 +22,14 @@ export default function Schedule() {
             their detail page.
           </p>
         </div>
+
+        <TodayRoster />
+
         <SchedulesList />
       </div>
     );
   }
 
-  // Employee view: their own schedule.
   return <EmployeeSchedule scheduleId={profile?.schedule_id ?? undefined} />;
 }
 
