@@ -17,3 +17,16 @@ export interface Profile {
   created_at: string;
   updated_at: string;
 }
+
+export interface Profile {
+  id: string;
+  email: string;
+  full_name: string;
+  role: Role;
+  active: boolean;
+  department: string | null;
+  managed_departments: string[];
+  schedule_id: string | null;
+  created_at: string;
+  updated_at: string;
+}

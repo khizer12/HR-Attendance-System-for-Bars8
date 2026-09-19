@@ -1,6 +1,9 @@
 import { Badge } from '@/components/ui/Badge';
 import { LiveTimer } from '@/features/attendance';
-import { displayAttendanceState } from '@/features/attendance/labels';
+import {
+  displayAttendanceState,
+  displayAttendanceStatus,
+} from '@/features/attendance/labels';
 import { formatDuration, formatTime } from '@/lib/time';
 import { cn } from '@/utils/cn';
 import type { AdminOverviewRow } from '@/features/admin';
@@ -71,8 +74,21 @@ export function AdminTable({ rows }: AdminTableProps) {
                   </div>
                 </td>
 
-                <td className="py-3 pr-3">
-                  <Badge variant={display.variant}>{display.label}</Badge>
+                                <td className="py-3 pr-3">
+                  <div className="flex flex-wrap items-center gap-1.5">
+                    <Badge variant={display.variant}>{display.label}</Badge>
+                    {(() => {
+                      const statusDisplay = displayAttendanceStatus(
+                        r.attendance_status,
+                      );
+                      if (!statusDisplay) return null;
+                      return (
+                        <Badge variant={statusDisplay.variant}>
+                          {statusDisplay.label}
+                        </Badge>
+                      );
+                    })()}
+                  </div>
                 </td>
 
                 <td className="py-3 pr-3 tabular-nums text-off-white">

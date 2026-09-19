@@ -5,6 +5,7 @@ import { Input } from '@/components/ui/Input';
 import { Modal } from '@/components/ui/Modal';
 import { updateEmployee } from '@/features/employees/api';
 import type { EmployeeRow } from '@/features/employees/api';
+import { useSchedules } from '@/features/schedules';
 import type { Role } from '@/types/auth';
 
 interface EditEmployeeModalProps {
@@ -62,14 +63,16 @@ interface EditFormProps {
 
 function EditForm({ employee, selfId, onClose, onSaved }: EditFormProps) {
   const isSelf = employee.id === selfId;
+  const { schedules } = useSchedules();
 
-  // Initialized from the employee prop. The key in the parent forces
-  // a fresh mount whenever the employee changes.
   const [fullName, setFullName] = useState(employee.full_name);
   const [role, setRole] = useState<Role>(employee.role);
   const [department, setDepartment] = useState(employee.department ?? '');
   const [managedDepartments, setManagedDepartments] = useState(
     employee.managed_departments.join(', '),
+  );
+  const [scheduleId, setScheduleId] = useState<string>(
+    employee.schedule_id ?? '',
   );
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -88,12 +91,12 @@ function EditForm({ employee, selfId, onClose, onSaved }: EditFormProps) {
       return;
     }
 
-    const managed =
+    const managed: string[] =
       role === 'sub_admin'
         ? managedDepartments
             .split(',')
-            .map((d) => d.trim())
-            .filter(Boolean)
+            .map((d: string) => d.trim())
+            .filter((d: string) => d.length > 0)
         : [];
 
     setSubmitting(true);
@@ -103,6 +106,7 @@ function EditForm({ employee, selfId, onClose, onSaved }: EditFormProps) {
         role,
         department: department.trim() || null,
         managed_departments: managed,
+        schedule_id: scheduleId || null,
       });
       onSaved();
       onClose();
@@ -156,6 +160,34 @@ function EditForm({ employee, selfId, onClose, onSaved }: EditFormProps) {
         onChange={(e) => setDepartment(e.target.value)}
         disabled={submitting}
       />
+
+      <div>
+        <label
+          htmlFor="edit-schedule"
+          className="block text-xs font-medium text-off-white mb-1.5"
+        >
+          Schedule
+        </label>
+        <select
+          id="edit-schedule"
+          value={scheduleId}
+          onChange={(e) => setScheduleId(e.target.value)}
+          disabled={submitting}
+          className="w-full h-10 rounded-md bg-charcoal-2 text-off-white text-sm px-3 border border-charcoal-3 focus:outline-none focus:ring-2 focus:ring-lime/40 focus:border-lime/60 disabled:opacity-50"
+        >
+          <option value="">— No schedule —</option>
+          {schedules
+            .filter((s) => s.active || s.id === employee.schedule_id)
+            .map((s) => (
+              <option key={s.id} value={s.id}>
+                {s.name}
+              </option>
+            ))}
+        </select>
+        <p className="text-xs text-muted-gray mt-1.5">
+          Controls this employee&apos;s working hours and lateness rules.
+        </p>
+      </div>
 
       {role === 'sub_admin' && (
         <Input

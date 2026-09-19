@@ -8,6 +8,7 @@ export interface EmployeeRow {
   role: Role;
   department: string | null;
   managed_departments: string[];
+  schedule_id: string | null;
   active: boolean;
   created_at: string;
   updated_at: string;
@@ -27,11 +28,12 @@ export interface UpdateEmployeeInput {
   role?: Role;
   department?: string | null;
   managed_departments?: string[];
+  schedule_id?: string | null;
   active?: boolean;
 }
 
 const PROFILE_COLUMNS =
-  'id, email, full_name, role, department, managed_departments, active, created_at, updated_at';
+  'id, email, full_name, role, department, managed_departments, schedule_id, active, created_at, updated_at';   
 
 export async function listEmployees(): Promise<EmployeeRow[]> {
   const { data, error } = await supabase
