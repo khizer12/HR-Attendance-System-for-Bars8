@@ -8,6 +8,7 @@ import {
   canStartBreak,
   displayAttendanceState,
 } from '@/features/attendance/labels';
+import { LiveTimer } from '@/features/attendance/LiveTimer';
 import { formatDuration, formatTime } from '@/lib/time';
 import type { UseAttendanceResult } from '@/features/attendance';
 
@@ -49,11 +50,29 @@ export function StatusCard({ attendance }: StatusCardProps) {
         </div>
       </div>
 
-      <dl className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
+            <dl className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
         <Stat label="Clocked in" value={clockInAt ? formatTime(clockInAt) : '—'} />
         <Stat label="Clocked out" value={clockOutAt ? formatTime(clockOutAt) : '—'} />
-        <Stat label="Worked" value={formatDuration(workMinutes)} />
-        <Stat label="Break" value={formatDuration(breakMinutes)} />
+
+        {state === 'ON_BREAK' && summary?.active_break_started_at ? (
+          <LiveStat
+            label="Break duration"
+            since={summary.active_break_started_at}
+            tone="warning"
+          />
+        ) : (
+          <Stat label="Worked" value={formatDuration(workMinutes)} />
+        )}
+
+        {state === 'CHECKED_IN' || state === 'BACK_FROM_BREAK' ? (
+          <LiveStat
+            label="Working for"
+            since={clockInAt}
+            tone="lime"
+          />
+        ) : (
+          <Stat label="Break" value={formatDuration(breakMinutes)} />
+        )}
       </dl>
 
       {error && (
@@ -120,6 +139,23 @@ function Stat({ label, value }: StatProps) {
     <div>
       <dt className="text-xs text-muted-gray mb-1">{label}</dt>
       <dd className="text-sm font-medium text-off-white">{value}</dd>
+    </div>
+  );
+}
+
+interface LiveStatProps {
+  label: string;
+  since: string | null;
+  tone?: 'default' | 'muted' | 'lime' | 'warning';
+}
+
+function LiveStat({ label, since, tone }: LiveStatProps) {
+  return (
+    <div>
+      <dt className="text-xs text-muted-gray mb-1">{label}</dt>
+      <dd>
+        <LiveTimer since={since} tone={tone} />
+      </dd>
     </div>
   );
 }

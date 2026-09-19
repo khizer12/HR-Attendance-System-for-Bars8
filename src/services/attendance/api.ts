@@ -79,3 +79,27 @@ export async function rpcClockOut(): Promise<void> {
   const { error } = await supabase.rpc('clock_out');
   if (error) throw new Error(error.message);
 }
+
+export interface BreakRow {
+  id: string;
+  attendance_id: string;
+  break_start_at: string;
+  break_end_at: string | null;
+  duration_minutes: number | null;
+  created_at: string;
+}
+
+export async function fetchBreaksForAttendance(
+  attendanceId: string | null,
+): Promise<BreakRow[]> {
+  if (!attendanceId) return [];
+
+  const { data, error } = await supabase
+    .from('break_records')
+    .select('*')
+    .eq('attendance_id', attendanceId)
+    .order('break_start_at', { ascending: true });
+
+  if (error) throw new Error(error.message);
+  return (data ?? []) as BreakRow[];
+}

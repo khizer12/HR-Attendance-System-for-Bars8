@@ -2,11 +2,13 @@ import { useCallback, useEffect, useState } from 'react';
 
 import {
   fetchAttendanceHistory,
+  fetchBreaksForAttendance,
   fetchTodaySummary,
   rpcClockIn,
   rpcClockOut,
   rpcEndBreak,
   rpcStartBreak,
+  type BreakRow,
   type TodaySummaryRow,
 } from '@/services/attendance/api';
 import {
@@ -19,6 +21,7 @@ export interface UseAttendanceResult {
   state: AttendanceState;
   summary: TodaySummaryRow | null;
   history: AttendanceRecord[];
+  breaks: BreakRow[];
   loading: boolean;
   error: string | null;
   actionInProgress: AttendanceAction | null;
@@ -33,6 +36,7 @@ export interface UseAttendanceResult {
 export function useAttendance(): UseAttendanceResult {
   const [summary, setSummary] = useState<TodaySummaryRow | null>(null);
   const [history, setHistory] = useState<AttendanceRecord[]>([]);
+  const [breaks, setBreaks] = useState<BreakRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [actionInProgress, setActionInProgress] =
@@ -44,8 +48,12 @@ export function useAttendance(): UseAttendanceResult {
         fetchTodaySummary(),
         fetchAttendanceHistory(),
       ]);
+      const nextBreaks = await fetchBreaksForAttendance(
+        nextSummary.attendance_id,
+      );
       setSummary(nextSummary);
       setHistory(nextHistory);
+      setBreaks(nextBreaks);
       setError(null);
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Failed to load attendance.');
@@ -54,7 +62,7 @@ export function useAttendance(): UseAttendanceResult {
     }
   }, []);
 
-  // Initial load. Inlined so React Compiler can see that no setState
+  // Initial load. Inlined so React Compiler can verify no setState
   // runs synchronously in the effect body.
   useEffect(() => {
     let cancelled = false;
@@ -65,9 +73,13 @@ export function useAttendance(): UseAttendanceResult {
           fetchTodaySummary(),
           fetchAttendanceHistory(),
         ]);
+        const nextBreaks = await fetchBreaksForAttendance(
+          nextSummary.attendance_id,
+        );
         if (cancelled) return;
         setSummary(nextSummary);
         setHistory(nextHistory);
+        setBreaks(nextBreaks);
         setError(null);
       } catch (e) {
         if (cancelled) return;
@@ -119,6 +131,7 @@ export function useAttendance(): UseAttendanceResult {
     state,
     summary,
     history,
+    breaks,
     loading,
     error,
     actionInProgress,

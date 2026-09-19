@@ -63,3 +63,28 @@ export function greetingForNow(now: Date = new Date()): string {
   if (hour < 17) return 'Good afternoon';
   return 'Good evening';
 }
+
+/**
+ * Format a duration as "1h 30m 45s" — includes seconds. Used for live timers.
+ * Differs from formatDuration() which is minute-granular for table display.
+ */
+export function formatElapsed(seconds: number): string {
+  const safe = Math.max(0, Math.floor(seconds));
+  const h = Math.floor(safe / 3600);
+  const m = Math.floor((safe % 3600) / 60);
+  const s = safe % 60;
+  if (h > 0) return `${h}h ${m}m ${s}s`;
+  if (m > 0) return `${m}m ${s}s`;
+  return `${s}s`;
+}
+
+/**
+ * Seconds between two ISO timestamps. Always non-negative.
+ * Used by live timers — pass now() as the second argument.
+ */
+export function secondsBetween(fromIso: string, to: Date = new Date()): number {
+  const from = new Date(fromIso).getTime();
+  const toMs = to.getTime();
+  if (!Number.isFinite(from) || !Number.isFinite(toMs)) return 0;
+  return Math.max(0, Math.floor((toMs - from) / 1000));
+}
