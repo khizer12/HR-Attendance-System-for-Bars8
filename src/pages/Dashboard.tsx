@@ -17,7 +17,6 @@ export default function Dashboard() {
 
   return (
     <div className="p-6 lg:p-8 space-y-6 max-w-6xl">
-      {/* Header */}
       <div>
         <h2 className="font-heading text-2xl">
           {greeting}, {firstName}
@@ -25,14 +24,13 @@ export default function Dashboard() {
         <p className="text-muted-gray text-sm mt-1">{formatDateLong()}</p>
       </div>
 
-      {/* Primary grid */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2 space-y-6">
           <StatusCard attendance={attendance} />
           <QuickStats
-            workedMinutes={0}
-            breakMinutes={0}
-            status={null}
+            workedMinutes={attendance.summary?.total_work_minutes ?? 0}
+            breakMinutes={attendance.summary?.total_break_minutes ?? 0}
+            status={attendance.summary?.status ?? null}
           />
         </div>
 
@@ -41,7 +39,6 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* History */}
       <AttendanceHistory records={attendance.history} />
     </div>
   );

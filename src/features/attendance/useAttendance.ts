@@ -1,18 +1,27 @@
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
+import {
+  fetchAttendanceHistory,
+  fetchTodaySummary,
+  rpcClockIn,
+  rpcClockOut,
+  rpcEndBreak,
+  rpcStartBreak,
+  type TodaySummaryRow,
+} from '@/services/attendance/api';
+import {
+  applyAction,
+  type AttendanceAction,
+} from '@/services/attendance/stateMachine';
 import type { AttendanceRecord, AttendanceState } from '@/types/attendance';
 
 export interface UseAttendanceResult {
-  /** Current state machine value. */
   state: AttendanceState;
-  /** Recent attendance records, newest first. */
+  summary: TodaySummaryRow | null;
   history: AttendanceRecord[];
-  /** True while the initial load is in progress. */
   loading: boolean;
-  /** Human-readable error from the last failed action. */
   error: string | null;
-  /** True while a clock-in / break / clock-out action is in flight. */
-  actionInProgress: boolean;
+  actionInProgress: AttendanceAction | null;
 
   clockIn: () => Promise<void>;
   startBreak: () => Promise<void>;
@@ -21,32 +30,102 @@ export interface UseAttendanceResult {
   refresh: () => Promise<void>;
 }
 
-/**
- * Phase 4: returns a static "NOT_CHECKED_IN" state.
- * Phase 5 will replace the internals with real Supabase calls and a
- * state machine that rejects invalid transitions.
- */
 export function useAttendance(): UseAttendanceResult {
+  const [summary, setSummary] = useState<TodaySummaryRow | null>(null);
+  const [history, setHistory] = useState<AttendanceRecord[]>([]);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [actionInProgress, setActionInProgress] =
+    useState<AttendanceAction | null>(null);
 
-  const notImplemented = (action: string) => async () => {
-    setError(`${action} will be enabled in Phase 5 (Attendance Engine).`);
-  };
+  const load = useCallback(async () => {
+    try {
+      const [nextSummary, nextHistory] = await Promise.all([
+        fetchTodaySummary(),
+        fetchAttendanceHistory(),
+      ]);
+      setSummary(nextSummary);
+      setHistory(nextHistory);
+      setError(null);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Failed to load attendance.');
+    } finally {
+      setLoading(false);
+    }
+  }, []);
 
-  const refresh = async () => {
-    setError(null);
-  };
+  // Initial load. Inlined so React Compiler can see that no setState
+  // runs synchronously in the effect body.
+  useEffect(() => {
+    let cancelled = false;
+
+    (async () => {
+      try {
+        const [nextSummary, nextHistory] = await Promise.all([
+          fetchTodaySummary(),
+          fetchAttendanceHistory(),
+        ]);
+        if (cancelled) return;
+        setSummary(nextSummary);
+        setHistory(nextHistory);
+        setError(null);
+      } catch (e) {
+        if (cancelled) return;
+        setError(
+          e instanceof Error ? e.message : 'Failed to load attendance.',
+        );
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const state: AttendanceState =
+    (summary?.state ?? 'NOT_CHECKED_IN') as AttendanceState;
+
+  const run = useCallback(
+    async (action: AttendanceAction, fn: () => Promise<void>) => {
+      setError(null);
+
+      const check = applyAction(state, action);
+      if (!check.ok) {
+        setError(check.reason);
+        return;
+      }
+
+      setActionInProgress(action);
+      try {
+        await fn();
+        await load();
+      } catch (e) {
+        setError(e instanceof Error ? e.message : 'Action failed.');
+      } finally {
+        setActionInProgress(null);
+      }
+    },
+    [state, load],
+  );
+
+  const clockIn = useCallback(() => run('clock_in', rpcClockIn), [run]);
+  const startBreak = useCallback(() => run('start_break', rpcStartBreak), [run]);
+  const endBreak = useCallback(() => run('end_break', rpcEndBreak), [run]);
+  const clockOut = useCallback(() => run('clock_out', rpcClockOut), [run]);
 
   return {
-    state: 'NOT_CHECKED_IN',
-    history: [],
-    loading: false,
+    state,
+    summary,
+    history,
+    loading,
     error,
-    actionInProgress: false,
-    clockIn: notImplemented('Clock in'),
-    startBreak: notImplemented('Start break'),
-    endBreak: notImplemented('End break'),
-    clockOut: notImplemented('Clock out'),
-    refresh,
+    actionInProgress,
+    clockIn,
+    startBreak,
+    endBreak,
+    clockOut,
+    refresh: load,
   };
 }

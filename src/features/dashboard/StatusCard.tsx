@@ -8,7 +8,7 @@ import {
   canStartBreak,
   displayAttendanceState,
 } from '@/features/attendance/labels';
-import { formatTime } from '@/lib/time';
+import { formatDuration, formatTime } from '@/lib/time';
 import type { UseAttendanceResult } from '@/features/attendance';
 
 interface StatusCardProps {
@@ -18,17 +18,22 @@ interface StatusCardProps {
 export function StatusCard({ attendance }: StatusCardProps) {
   const {
     state,
-    clock_in_at,
-    clock_out_at,
+    summary,
+    error,
     actionInProgress,
     clockIn,
     startBreak,
     endBreak,
     clockOut,
-    error,
-  } = useAttendanceSafe(attendance);
+  } = attendance;
 
   const display = displayAttendanceState(state);
+  const isBusy = actionInProgress !== null;
+
+  const clockInAt = summary?.clock_in_at ?? null;
+  const clockOutAt = summary?.clock_out_at ?? null;
+  const workMinutes = summary?.total_work_minutes ?? 0;
+  const breakMinutes = summary?.total_break_minutes ?? 0;
 
   return (
     <Card className="p-6">
@@ -44,19 +49,11 @@ export function StatusCard({ attendance }: StatusCardProps) {
         </div>
       </div>
 
-      <dl className="grid grid-cols-2 gap-4 mb-6">
-        <div>
-          <dt className="text-xs text-muted-gray mb-1">Clocked in</dt>
-          <dd className="text-sm font-medium text-off-white">
-            {clock_in_at ? formatTime(clock_in_at) : '—'}
-          </dd>
-        </div>
-        <div>
-          <dt className="text-xs text-muted-gray mb-1">Clocked out</dt>
-          <dd className="text-sm font-medium text-off-white">
-            {clock_out_at ? formatTime(clock_out_at) : '—'}
-          </dd>
-        </div>
+      <dl className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
+        <Stat label="Clocked in" value={clockInAt ? formatTime(clockInAt) : '—'} />
+        <Stat label="Clocked out" value={clockOutAt ? formatTime(clockOutAt) : '—'} />
+        <Stat label="Worked" value={formatDuration(workMinutes)} />
+        <Stat label="Break" value={formatDuration(breakMinutes)} />
       </dl>
 
       {error && (
@@ -72,8 +69,8 @@ export function StatusCard({ attendance }: StatusCardProps) {
         <Button
           variant="primary"
           size="lg"
-          loading={actionInProgress}
-          disabled={!canClockIn(state)}
+          loading={actionInProgress === 'clock_in'}
+          disabled={!canClockIn(state) || isBusy}
           onClick={() => void clockIn()}
         >
           Clock in
@@ -82,7 +79,8 @@ export function StatusCard({ attendance }: StatusCardProps) {
         <Button
           variant="secondary"
           size="lg"
-          disabled={!canStartBreak(state) || actionInProgress}
+          loading={actionInProgress === 'start_break'}
+          disabled={!canStartBreak(state) || isBusy}
           onClick={() => void startBreak()}
         >
           Start break
@@ -91,7 +89,8 @@ export function StatusCard({ attendance }: StatusCardProps) {
         <Button
           variant="secondary"
           size="lg"
-          disabled={!canEndBreak(state) || actionInProgress}
+          loading={actionInProgress === 'end_break'}
+          disabled={!canEndBreak(state) || isBusy}
           onClick={() => void endBreak()}
         >
           End break
@@ -100,7 +99,8 @@ export function StatusCard({ attendance }: StatusCardProps) {
         <Button
           variant="outline"
           size="lg"
-          disabled={!canClockOut(state) || actionInProgress}
+          loading={actionInProgress === 'clock_out'}
+          disabled={!canClockOut(state) || isBusy}
           onClick={() => void clockOut()}
         >
           Clock out
@@ -110,14 +110,16 @@ export function StatusCard({ attendance }: StatusCardProps) {
   );
 }
 
-/**
- * The stub hook (Phase 4) doesn't have all fields yet — the real hook (Phase 5)
- * will. This adapter keeps the component written against the full interface.
- */
-function useAttendanceSafe(a: UseAttendanceResult) {
-  return {
-    ...a,
-    clock_in_at: null as string | null,
-    clock_out_at: null as string | null,
-  };
+interface StatProps {
+  label: string;
+  value: string;
+}
+
+function Stat({ label, value }: StatProps) {
+  return (
+    <div>
+      <dt className="text-xs text-muted-gray mb-1">{label}</dt>
+      <dd className="text-sm font-medium text-off-white">{value}</dd>
+    </div>
+  );
 }
