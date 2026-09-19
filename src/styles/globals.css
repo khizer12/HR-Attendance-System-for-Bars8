@@ -1,17 +1,148 @@
 @import 'tailwindcss';
 
-/* Minimal reset for full-height app */
-html,
-body,
-#root {
-  height: 100%;
+/* ============================================================
+   DESIGN TOKENS — Tailwind v4 @theme namespace
+   These become utilities automatically:
+     bg-near-black, text-lime, font-heading, rounded-lg, etc.
+   ============================================================ */
+
+@theme {
+  /* Brand palette */
+  --color-near-black: #08090a;
+  --color-charcoal: #151718;
+  --color-charcoal-2: #1e2122;
+  --color-charcoal-3: #26292a;
+  --color-charcoal-4: #3a3d3e;
+  --color-off-white: #f4f4f0;
+  --color-lime: #b8ff00;
+  --color-lime-dim: #9cd600;
+  --color-muted-gray: #929797;
+
+  /* Status */
+  --color-success: #4ade80;
+  --color-warning: #fbbf24;
+  --color-danger: #f87171;
+  --color-info: #60a5fa;
+
+  /* Typography */
+  --font-heading: 'Space Grotesk', system-ui, -apple-system, sans-serif;
+  --font-body: 'Inter', system-ui, -apple-system, sans-serif;
+
+  /* Radii */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
 }
 
-body {
-  margin: 0;
-  background-color: #08090a;
-  color: #f4f4f0;
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+/* ============================================================
+   BASE LAYER — global defaults
+   ============================================================ */
+
+@layer base {
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+
+  body {
+    margin: 0;
+    background-color: var(--color-near-black);
+    color: var(--color-off-white);
+    font-family: var(--font-body);
+    font-size: 14px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-heading);
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    margin: 0;
+  }
+
+  /* Make focus rings visible and consistent across browsers */
+  :focus-visible {
+    outline: 2px solid var(--color-lime);
+    outline-offset: 2px;
+    border-radius: var(--radius-sm);
+  }
+
+  /* Disable focus ring only for mouse users on buttons/links */
+  :focus:not(:focus-visible) {
+    outline: none;
+  }
+
+  /* Scrollbar — subtle, matches dark theme */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-charcoal-3) transparent;
+  }
+
+  *::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  *::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  *::-webkit-scrollbar-thumb {
+    background-color: var(--color-charcoal-3);
+    border-radius: 999px;
+    border: 2px solid var(--color-near-black);
+  }
+
+  *::-webkit-scrollbar-thumb:hover {
+    background-color: var(--color-charcoal-4);
+  }
+
+  /* Respect user motion preference — mandatory per spec */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+/* ============================================================
+   UTILITIES LAYER — small helpers
+   ============================================================ */
+
+@layer utilities {
+  /* Visually hidden but accessible to screen readers */
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  /* Subtle noise background for hero/dashboard areas — very light, non-distracting */
+  .bg-grid {
+    background-image:
+      linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+    background-size: 32px 32px;
+  }
 }

@@ -1,14 +1,29 @@
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+
+import { MainLayout } from '@/layouts/MainLayout';
+import Attendance from '@/pages/Attendance';
+import Dashboard from '@/pages/Dashboard';
+import Employees from '@/pages/Employees';
+import NotFound from '@/pages/NotFound';
+import Reports from '@/pages/Reports';
+import Schedule from '@/pages/Schedule';
+import Settings from '@/pages/Settings';
+
 export default function App() {
   return (
-    <main className="flex min-h-full items-center justify-center p-6">
-      <div className="text-center">
-        <h1 className="font-bold text-3xl tracking-tight">
-          HR Attendance Management System
-        </h1>
-        <p className="mt-3 text-sm opacity-70">
-          Phase 1 — Foundation. App shell arrives in Phase 2.
-        </p>
-      </div>
-    </main>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<MainLayout />}>
+          <Route index element={<Navigate to="/dashboard" replace />} />
+          <Route path="dashboard" element={<Dashboard />} />
+          <Route path="attendance" element={<Attendance />} />
+          <Route path="schedule" element={<Schedule />} />
+          <Route path="employees" element={<Employees />} />
+          <Route path="reports" element={<Reports />} />
+          <Route path="settings" element={<Settings />} />
+          <Route path="*" element={<NotFound />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
   );
 }
