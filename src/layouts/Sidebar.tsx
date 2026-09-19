@@ -1,13 +1,17 @@
 import { NavLink } from 'react-router-dom';
 
 import { cn } from '@/utils/cn';
-import { navItems } from '@/lib/navigation';
+import { getNavItemsForRole } from '@/lib/navigation';
+import { useAuth } from '@/features/auth';
 
 interface SidebarProps {
   onNavigate?: () => void;
 }
 
 export function Sidebar({ onNavigate }: SidebarProps) {
+  const { profile } = useAuth();
+  const items = profile ? getNavItemsForRole(profile.role) : [];
+
   return (
     <nav
       aria-label="Primary"
@@ -30,7 +34,7 @@ export function Sidebar({ onNavigate }: SidebarProps) {
       </div>
 
       <ul className="flex-1 overflow-y-auto py-3 px-2 space-y-0.5">
-        {navItems.map((item) => (
+        {items.map((item) => (
           <li key={item.to}>
             <NavLink
               to={item.to}
@@ -56,7 +60,7 @@ export function Sidebar({ onNavigate }: SidebarProps) {
 
       <div className="p-3 border-t border-charcoal-3">
         <div className="text-[10px] text-muted-gray text-center">
-          v0.1.0 — Phase 2
+          v0.1.0 — Phase 3
         </div>
       </div>
     </nav>

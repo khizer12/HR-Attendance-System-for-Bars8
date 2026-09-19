@@ -43,3 +43,13 @@ export const navItems: NavItem[] = [
     roles: ['super_admin'],
   },
 ];
+
+/**
+ * Return nav items visible to a given role.
+ * Order is preserved from the source array.
+ */
+export function getNavItemsForRole(
+  role: 'super_admin' | 'sub_admin' | 'employee',
+): NavItem[] {
+  return navItems.filter((item) => item.roles.includes(role));
+}
