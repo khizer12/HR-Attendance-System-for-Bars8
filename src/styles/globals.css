@@ -1,0 +1,17 @@
+@import 'tailwindcss';
+
+/* Minimal reset for full-height app */
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background-color: #08090a;
+  color: #f4f4f0;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
