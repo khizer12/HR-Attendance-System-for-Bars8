@@ -60,8 +60,35 @@ export async function fetchAttendanceHistory(limit = 30): Promise<AttendanceReco
   return (data ?? []) as AttendanceRecord[];
 }
 
-export async function rpcClockIn(): Promise<void> {
-  const { error } = await supabase.rpc('clock_in');
+/**
+ * Coordinates to send with `clock_in`. All three fields come from
+ * `navigator.geolocation.getCurrentPosition`. The server recomputes
+ * distance itself — these values are recorded for audit, not trusted
+ * for enforcement.
+ */
+export interface ClockInLocation {
+  latitude: number;
+  longitude: number;
+  accuracyMeters: number;
+}
+
+/**
+ * Call `clock_in`. When `location` is null the RPC is invoked with null
+ * coordinates — the server allows this for schedules that don't require
+ * location, and rejects it with a clear message for those that do.
+ *
+ * Server-side the function writes a `location_verifications` row of
+ * kind='clock_in' only if the schedule required location AND the
+ * geofence check passed.
+ */
+export async function rpcClockIn(
+  location: ClockInLocation | null = null,
+): Promise<void> {
+  const { error } = await supabase.rpc('clock_in', {
+    p_latitude: location?.latitude ?? null,
+    p_longitude: location?.longitude ?? null,
+    p_accuracy_meters: location?.accuracyMeters ?? null,
+  });
   if (error) throw new Error(error.message);
 }
 

@@ -85,14 +85,14 @@ export function StatusCard({ attendance }: StatusCardProps) {
       )}
 
       <div className="flex flex-wrap gap-2">
-        <Button
+                <Button
           variant="primary"
           size="lg"
           loading={actionInProgress === 'clock_in'}
           disabled={!canClockIn(state) || isBusy}
           onClick={() => void clockIn()}
         >
-          Clock in
+          {actionInProgress === 'clock_in' ? 'Getting location…' : 'Clock in'}
         </Button>
 
         <Button
