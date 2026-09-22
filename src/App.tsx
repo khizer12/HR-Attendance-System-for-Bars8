@@ -37,7 +37,6 @@ export default function App() {
             <Route path="schedule" element={<Schedule />} />
 
             {/* Admin-only pages */}
-                         {/* Admin-only pages */}
             <Route
               path="employees"
               element={

@@ -3,6 +3,7 @@ import { useAttendance } from '@/features/attendance';
 import { AdminDashboard } from '@/features/admin';
 import {
   AttendanceHistory,
+  EmployeeVerificationsCard,
   QuickStats,
   ScheduleCard,
   StatusCard,
@@ -59,6 +60,8 @@ function EmployeeDashboard({
       </div>
 
       <AttendanceHistory records={attendance.history} />
+
+      <EmployeeVerificationsCard />
     </div>
   );
 }

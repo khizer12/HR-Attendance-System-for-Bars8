@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-
+import { EmployeeVerificationLog } from '@/features/location';
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
 import { Card, CardBody, CardHeader, CardTitle } from '@/components/ui/Card';
@@ -134,12 +134,7 @@ export default function EmployeeDetail() {
         </Card>
       </div>
 
-      <Card className="p-5">
-        <p className="text-xs text-muted-gray">
-          Attendance history, audit trail, and admin actions arrive in later
-          phases (10 and 12).
-        </p>
-      </Card>
+      <EmployeeVerificationLog employeeId={employee.id} />
 
       {callerProfile && (
         <EditEmployeeModal

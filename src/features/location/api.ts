@@ -4,6 +4,7 @@ import type {
   VerificationKind,
   VerificationStatus,
 } from '@/types/location';
+import type { LocationVerification } from '@/types/location';
 
 /**
  * Thin wrappers over the location tables and the
@@ -81,4 +82,69 @@ export async function recordLocationVerification(
     throw new Error('record_location_verification returned no id.');
   }
   return data;
+}
+
+/**
+ * Fetch all verifications for one attendance record.
+ * RLS allows the employee to read their own; admins read scoped rows.
+ */
+export async function fetchVerificationsForAttendance(
+  attendanceId: string,
+): Promise<LocationVerification[]> {
+  const { data, error } = await supabase
+    .from('location_verifications')
+    .select(
+      'id, attendance_id, kind, status, latitude, longitude, accuracy_meters, distance_meters, created_at',
+    )
+    .eq('attendance_id', attendanceId)
+    .order('created_at', { ascending: false });
+
+  if (error) throw new Error(error.message);
+  return (data ?? []) as LocationVerification[];
+}
+
+/**
+ * Admin view: last N verifications for a given employee, across all
+ * attendance rows. Joins through attendance_records to filter by
+ * employee_id. RLS `can_view_employee` enforces sub-admin scoping.
+ */
+export interface EmployeeVerificationRow extends LocationVerification {
+  work_date: string;
+}
+
+export async function fetchRecentVerificationsForEmployee(
+  employeeId: string,
+  limit = 30,
+): Promise<EmployeeVerificationRow[]> {
+  const { data, error } = await supabase
+    .from('location_verifications')
+    .select(
+      `
+      id, attendance_id, kind, status,
+      latitude, longitude, accuracy_meters, distance_meters, created_at,
+      attendance_records!inner ( work_date, employee_id )
+    `,
+    )
+    .eq('attendance_records.employee_id', employeeId)
+    .order('created_at', { ascending: false })
+    .limit(limit);
+
+  if (error) throw new Error(error.message);
+
+  type RawRow = LocationVerification & {
+    attendance_records: { work_date: string; employee_id: string } | null;
+  };
+
+  return ((data ?? []) as unknown as RawRow[]).map((row) => ({
+    id: row.id,
+    attendance_id: row.attendance_id,
+    kind: row.kind,
+    status: row.status,
+    latitude: row.latitude,
+    longitude: row.longitude,
+    accuracy_meters: row.accuracy_meters,
+    distance_meters: row.distance_meters,
+    created_at: row.created_at,
+    work_date: row.attendance_records?.work_date ?? '',
+  }));
 }
