@@ -39,3 +39,22 @@ export interface UserRacingProfile {
   avatar_key: string | null;
   updated_at: string;
 }
+/**
+ * One racer on the track — either currently driving or already parked.
+ * Derived from attendance + racing profile, not stored.
+ */
+export interface RaceParticipant {
+  user_id: string;
+  display_name: string;
+  email: string;
+  car: RacingCar | null;
+  avatar_key: string | null;
+  /** Minutes worked so far today (breaks subtracted). */
+  work_minutes: number;
+  /** True when currently checked in and not parked. */
+  on_track: boolean;
+  /** True when the employee is on a pit stop right now. */
+  on_pit: boolean;
+  /** ISO timestamp of clock-in. Null if never clocked in today. */
+  clock_in_at: string | null;
+}
