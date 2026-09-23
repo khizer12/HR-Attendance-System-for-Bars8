@@ -1,12 +1,13 @@
 import { useAuth } from '@/features/auth';
-import { BreakList, Timeline, useAttendance } from '@/features/attendance';
+import { BreakList, Timeline } from '@/features/attendance';
 import { Card, CardBody, CardHeader, CardTitle } from '@/components/ui/Card';
 import { StatusCard } from '@/features/dashboard';
 import { formatDateLong } from '@/lib/time';
+import { useAttendanceContext } from '@/features/attendance';
 
 export default function Attendance() {
   const { profile } = useAuth();
-  const attendance = useAttendance();
+  const attendance = useAttendanceContext();
 
   const todayLabel = formatDateLong();
 

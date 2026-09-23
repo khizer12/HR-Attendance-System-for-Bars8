@@ -1,6 +1,6 @@
 import { Card, CardBody, CardHeader, CardTitle } from '@/components/ui/Card';
 import { useAuth } from '@/features/auth';
-import { useAttendance } from '@/features/attendance';
+import { useAttendanceContext } from '@/features/attendance';
 import { VerificationList } from '@/features/location';
 import { useVerificationsForAttendance } from '@/features/location/useVerificationsForAttendance';
 import { useSchedule } from '@/features/schedules';
@@ -12,7 +12,7 @@ import { useSchedule } from '@/features/schedules';
 export function EmployeeVerificationsCard() {
   const { profile } = useAuth();
   const { schedule } = useSchedule(profile?.schedule_id ?? undefined);
-  const { summary } = useAttendance();
+  const { summary } = useAttendanceContext();
   const { rows, loading } = useVerificationsForAttendance(
     summary?.attendance_id ?? null,
   );

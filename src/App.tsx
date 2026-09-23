@@ -2,6 +2,7 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 
 import { ProtectedRoute } from '@/components/ProtectedRoute';
 import { AuthProvider } from '@/features/auth';
+import { AttendanceProvider } from '@/features/attendance';
 import { MainLayout } from '@/layouts/MainLayout';
 import Attendance from '@/pages/Attendance';
 import Dashboard from '@/pages/Dashboard';
@@ -23,14 +24,16 @@ export default function App() {
           <Route path="/login" element={<Login />} />
 
           {/* Protected shell */}
-          <Route
+            <Route
             path="/"
             element={
               <ProtectedRoute>
-                <MainLayout />
+                <AttendanceProvider>
+                  <MainLayout />
+                </AttendanceProvider>
               </ProtectedRoute>
             }
-          >
+            >
             <Route index element={<Navigate to="/dashboard" replace />} />
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="attendance" element={<Attendance />} />

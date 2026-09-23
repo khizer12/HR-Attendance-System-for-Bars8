@@ -101,9 +101,15 @@ function EditForm({ employee, selfId, onClose, onSaved }: EditFormProps) {
 
     setSubmitting(true);
     try {
-      await updateEmployee(employee.id, {
+            await updateEmployee(employee.id, {
         full_name: fullName.trim(),
-        role,
+        // Only send `role` if the admin is editing someone else. Sending
+        // it for self would still be a no-op (the DB trigger allows the
+        // change since there's another super_admin), but omitting it
+        // removes a footgun: if the disable logic above ever regresses
+        // and this field slips through, the admin could accidentally
+        // demote themselves.
+        ...(isSelf ? {} : { role }),
         department: department.trim() || null,
         managed_departments: managed,
         schedule_id: scheduleId || null,

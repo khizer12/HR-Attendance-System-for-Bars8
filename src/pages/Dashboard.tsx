@@ -1,5 +1,5 @@
 import { useAuth } from '@/features/auth';
-import { useAttendance } from '@/features/attendance';
+import { useAttendanceContext } from '@/features/attendance';
 import { AdminDashboard } from '@/features/admin';
 import {
   AttendanceHistory,
@@ -30,7 +30,7 @@ function EmployeeDashboard({
 }: {
   profile: ReturnType<typeof useAuth>['profile'];
 }) {
-  const attendance = useAttendance();
+  const attendance = useAttendanceContext();
 
   const greeting = greetingForNow();
   const firstName = profile?.full_name?.trim().split(/\s+/)[0] || 'there';
