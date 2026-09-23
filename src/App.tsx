@@ -1,5 +1,5 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
-
+import AuditLog from '@/pages/AuditLog';
 import { ProtectedRoute } from '@/components/ProtectedRoute';
 import { AuthProvider } from '@/features/auth';
 import { AttendanceProvider } from '@/features/attendance';
@@ -61,6 +61,14 @@ export default function App() {
               element={
                 <ProtectedRoute allowRoles={['super_admin', 'sub_admin']}>
                   <Reports />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="audit-log"
+              element={
+                <ProtectedRoute allowRoles={['super_admin']}>
+                  <AuditLog />
                 </ProtectedRoute>
               }
             />

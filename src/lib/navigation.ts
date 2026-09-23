@@ -42,6 +42,12 @@ export const navItems: NavItem[] = [
     icon: '⚙',
     roles: ['super_admin'],
   },
+    {
+    to: '/audit-log',
+    label: 'Audit log',
+    icon: '◱',
+    roles: ['super_admin'],
+  },
 ];
 
 /**
