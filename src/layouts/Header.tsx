@@ -27,20 +27,20 @@ export function Header({ onOpenMobileNav, title }: HeaderProps) {
     : '?';
 
   return (
-    <header className="h-16 flex items-center justify-between px-4 lg:px-6 bg-charcoal border-b border-charcoal-3">
+    <header className="h-16 flex items-center justify-between px-4 lg:px-6 bg-chrome border-b border-chrome-3">
       <div className="flex items-center gap-3">
         <button
           type="button"
           onClick={onOpenMobileNav}
           aria-label="Open navigation menu"
-          className="lg:hidden inline-flex h-9 w-9 items-center justify-center rounded-md text-off-white hover:bg-charcoal-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lime"
+          className="lg:hidden inline-flex h-9 w-9 items-center justify-center rounded-md text-off-white hover:bg-chrome-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lime"
         >
           <span aria-hidden="true" className="text-xl leading-none">
             ☰
           </span>
         </button>
 
-        <h1 className="font-heading text-base font-semibold">
+        <h1 className="font-heading text-base font-semibold text-off-white">
           {title ?? 'Dashboard'}
         </h1>
       </div>
@@ -52,7 +52,7 @@ export function Header({ onOpenMobileNav, title }: HeaderProps) {
           aria-haspopup="menu"
           aria-expanded={menuOpen}
           aria-label="Open user menu"
-                    className="h-9 w-9 rounded-full bg-charcoal-3 flex items-center justify-center text-xs font-medium text-off-white hover:bg-charcoal-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lime transition-all duration-150 active:scale-95"
+          className="h-9 w-9 rounded-full bg-chrome-3 flex items-center justify-center text-xs font-medium text-off-white hover:bg-chrome-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lime transition-all duration-150 active:scale-95"
         >
           {initials}
         </button>
@@ -65,15 +65,16 @@ export function Header({ onOpenMobileNav, title }: HeaderProps) {
               className="fixed inset-0 z-30"
               onClick={() => setMenuOpen(false)}
             />
-                        <div
+
+            <div
               role="menu"
               className={cn(
-                'absolute right-0 top-full mt-2 z-40 w-56 rounded-lg bg-charcoal-2 border border-charcoal-3 shadow-lg overflow-hidden',
+                'absolute right-0 top-full mt-2 z-40 w-56 rounded-lg bg-chrome-2 border border-chrome-3 shadow-lg overflow-hidden',
                 'animate-dropdown-in origin-top-right',
               )}
             >
               {profile && (
-                <div className="px-3 py-3 border-b border-charcoal-3">
+                <div className="px-3 py-3 border-b border-chrome-3">
                   <div className="text-sm font-medium text-off-white truncate">
                     {profile.full_name || 'Unnamed user'}
                   </div>
@@ -92,7 +93,7 @@ export function Header({ onOpenMobileNav, title }: HeaderProps) {
                   setMenuOpen(false);
                   void signOut();
                 }}
-                className="w-full text-left px-3 py-2.5 text-sm text-off-white hover:bg-charcoal-3 transition-colors focus-visible:outline-none focus-visible:bg-charcoal-3"
+                className="w-full text-left px-3 py-2.5 text-sm text-off-white hover:bg-chrome-3 transition-colors focus-visible:outline-none focus-visible:bg-chrome-3"
               >
                 Sign out
               </button>

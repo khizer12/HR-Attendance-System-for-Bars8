@@ -20,6 +20,12 @@
   --color-lime: #dc2626;
   --color-lime-dim: #b91c1c;
   --color-muted-gray: #b08898;
+    /* Chrome surfaces — deep maroon. Leans redder/browner than the
+     burgundy page palette for a "framed" feel without going cool. */
+  --color-chrome: #220404;
+  --color-chrome-2: #2d0606;
+  --color-chrome-3: #3c0a0a;
+  --color-chrome-4: #4a0d0d;
     /* Dark ink for text on the red primary button (cream-on-red fails WCAG AA). */
   --color-ink: #0a0207;
 
