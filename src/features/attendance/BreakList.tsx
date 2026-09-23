@@ -26,7 +26,8 @@ export function BreakList({ breaks }: BreakListProps) {
         return (
           <li
             key={b.id}
-            className="flex items-center justify-between gap-3 py-2.5"
+            style={{ animationDelay: `${Math.min(i * 40, 240)}ms` }}
+            className="flex items-center justify-between gap-3 py-2.5 animate-stagger-in"
           >
             <div>
               <p className="text-sm text-off-white">

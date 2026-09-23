@@ -45,7 +45,7 @@ export function Sidebar({ onNavigate }: SidebarProps) {
                   'transition-all duration-150 ease-out',
                   'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lime focus-visible:ring-offset-2 focus-visible:ring-offset-charcoal',
                   isActive
-                    ? 'bg-charcoal-3 text-off-white font-medium'
+                    ? 'bg-charcoal-3 text-off-white font-medium border-l-2 border-lime pl-[10px]'
                     : 'text-muted-gray hover:text-off-white hover:bg-charcoal-2 hover:translate-x-0.5',
                 )
               }

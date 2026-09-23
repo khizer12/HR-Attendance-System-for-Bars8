@@ -1,5 +1,6 @@
 import { Badge } from '@/components/ui/Badge';
 import { Card, CardBody, CardHeader, CardTitle } from '@/components/ui/Card';
+import { SkeletonRow } from '@/components/ui/Skeleton';
 import { displayAttendanceStatus } from '@/features/attendance/labels';
 import { formatDuration, formatTime } from '@/lib/time';
 import { DASHBOARD_HISTORY_LIMIT } from '@/lib/constants';
@@ -7,9 +8,13 @@ import type { AttendanceRecord } from '@/types/attendance';
 
 interface AttendanceHistoryProps {
   records: AttendanceRecord[];
+  loading?: boolean;
 }
 
-export function AttendanceHistory({ records }: AttendanceHistoryProps) {
+export function AttendanceHistory({
+  records,
+  loading = false,
+}: AttendanceHistoryProps) {
   const visible = records.slice(0, DASHBOARD_HISTORY_LIMIT);
 
   return (
@@ -21,7 +26,13 @@ export function AttendanceHistory({ records }: AttendanceHistoryProps) {
         </p>
       </CardHeader>
       <CardBody className="p-0">
-        {visible.length === 0 ? (
+        {loading && visible.length === 0 ? (
+          <div className="px-5 py-2">
+            <SkeletonRow />
+            <SkeletonRow />
+            <SkeletonRow />
+          </div>
+        ) : visible.length === 0 ? (
           <div className="px-5 py-10 text-center">
             <p className="text-sm text-muted-gray">
               No attendance records yet.
@@ -32,12 +43,13 @@ export function AttendanceHistory({ records }: AttendanceHistoryProps) {
           </div>
         ) : (
           <ul className="divide-y divide-charcoal-3">
-            {visible.map((r) => {
+            {visible.map((r, i) => {
               const statusDisplay = displayAttendanceStatus(r.status);
               return (
                 <li
                   key={r.id}
-                  className="px-5 py-3 flex items-center justify-between gap-4"
+                  style={{ animationDelay: `${Math.min(i * 40, 240)}ms` }}
+                  className="px-5 py-3 flex items-center justify-between gap-4 animate-stagger-in"
                 >
                   <div className="min-w-0">
                     <p className="text-sm text-off-white truncate">

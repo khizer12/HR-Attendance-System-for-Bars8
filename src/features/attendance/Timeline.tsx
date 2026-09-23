@@ -96,8 +96,12 @@ export function Timeline({ state, summary, breaks }: TimelineProps) {
         className="absolute left-[5px] top-2 bottom-2 w-px bg-charcoal-3"
       />
 
-      {events.map((e) => (
-        <li key={e.id} className="relative pl-6">
+      {events.map((e, i) => (
+        <li
+          key={e.id}
+          style={{ animationDelay: `${Math.min(i * 60, 360)}ms` }}
+          className="relative pl-6 animate-stagger-in"
+        >
           <span
             aria-hidden="true"
             className={cn(

@@ -59,7 +59,10 @@ function EmployeeDashboard({
         </div>
       </div>
 
-      <AttendanceHistory records={attendance.history} />
+            <AttendanceHistory
+        records={attendance.history}
+        loading={attendance.loading}
+      />
 
       <EmployeeVerificationsCard />
     </div>

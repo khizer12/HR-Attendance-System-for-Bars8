@@ -45,7 +45,12 @@ export function StatusCard({ attendance }: StatusCardProps) {
           </p>
           <div className="flex items-center gap-3">
             <h3 className="font-heading text-xl">{display.label}</h3>
-            <Badge variant={display.variant}>{display.label}</Badge>
+            <Badge
+              variant={display.variant}
+              className={state === 'ON_BREAK' ? 'animate-pulse-soft' : undefined}
+            >
+              {display.label}
+            </Badge>
           </div>
         </div>
       </div>

@@ -1,4 +1,5 @@
 import { Card, CardBody, CardHeader, CardTitle } from '@/components/ui/Card';
+import { SkeletonRow } from '@/components/ui/Skeleton';
 import { VerificationList } from '@/features/location/VerificationList';
 import { useRecentVerifications } from '@/features/location/useRecentVerifications';
 
@@ -21,8 +22,10 @@ export function EmployeeVerificationLog({
       </CardHeader>
       <CardBody className="p-0">
         {loading && rows.length === 0 ? (
-          <div className="py-8 text-center text-sm text-muted-gray">
-            Loading…
+          <div className="px-5 py-2">
+            <SkeletonRow />
+            <SkeletonRow />
+            <SkeletonRow />
           </div>
         ) : error ? (
           <div className="px-5 py-4">

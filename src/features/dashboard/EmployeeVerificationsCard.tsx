@@ -1,6 +1,7 @@
 import { Card, CardBody, CardHeader, CardTitle } from '@/components/ui/Card';
-import { useAuth } from '@/features/auth';
+import { SkeletonRow } from '@/components/ui/Skeleton';
 import { useAttendanceContext } from '@/features/attendance';
+import { useAuth } from '@/features/auth';
 import { VerificationList } from '@/features/location';
 import { useVerificationsForAttendance } from '@/features/location/useVerificationsForAttendance';
 import { useSchedule } from '@/features/schedules';
@@ -29,8 +30,9 @@ export function EmployeeVerificationsCard() {
       </CardHeader>
       <CardBody className="p-0">
         {loading && rows.length === 0 ? (
-          <div className="py-8 text-center text-sm text-muted-gray">
-            Loading…
+          <div className="px-5 py-2">
+            <SkeletonRow />
+            <SkeletonRow />
           </div>
         ) : (
           <VerificationList

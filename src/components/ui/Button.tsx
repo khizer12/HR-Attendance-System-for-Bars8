@@ -7,20 +7,21 @@ const buttonVariants = cva(
   // Base styles — always applied
     'inline-flex items-center justify-center gap-2 rounded-md font-medium ' +
     'transition-all duration-150 ease-out ' +
-    'active:scale-[0.97] ' +
+    'hover:-translate-y-px ' +
+    'active:scale-[0.97] active:translate-y-0 ' +
     'disabled:cursor-not-allowed disabled:opacity-50 ' +
     'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lime focus-visible:ring-offset-2 ' +
     'focus-visible:ring-offset-near-black',
   {
     variants: {
       variant: {
-        primary: 'bg-lime text-near-black hover:bg-lime-dim',
+        primary: 'bg-lime text-off-white hover:bg-lime-dim',
         secondary:
           'bg-charcoal-2 text-off-white border border-charcoal-3 hover:bg-charcoal-3',
         ghost: 'text-off-white hover:bg-charcoal-2',
         danger: 'bg-danger text-near-black hover:opacity-90',
         outline:
-          'bg-transparent text-lime border border-lime hover:bg-lime hover:text-near-black',
+          'bg-transparent text-lime border border-lime hover:bg-lime hover:text-off-white',
       },
       size: {
         sm: 'h-8 px-3 text-xs',

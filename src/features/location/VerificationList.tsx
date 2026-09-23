@@ -76,15 +76,16 @@ export function VerificationList({
 
   return (
     <ul className="divide-y divide-charcoal-3">
-      {rows.map((v) => {
+      {rows.map((v, i) => {
         const display = STATUS_DISPLAY[v.status];
         const flagged = isFlagged(v.status);
 
         return (
           <li
             key={v.id}
+            style={{ animationDelay: `${Math.min(i * 30, 240)}ms` }}
             className={cn(
-              'px-5 py-3 flex items-center justify-between gap-4',
+              'px-5 py-3 flex items-center justify-between gap-4 animate-stagger-in',
               flagged && 'bg-danger/[0.03]',
             )}
           >

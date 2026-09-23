@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-
+import { SkeletonRow } from '@/components/ui/Skeleton';
 import { Badge } from '@/components/ui/Badge';
 import { Card, CardBody, CardHeader, CardTitle } from '@/components/ui/Card';
 import { displayAttendanceState } from '@/features/attendance/labels';
@@ -71,9 +71,11 @@ export function TodayRoster() {
         </p>
       </CardHeader>
       <CardBody className="p-0">
-        {isLoading && overview.rows.length === 0 ? (
-          <div className="py-10 text-center text-sm text-muted-gray">
-            Loading…
+                {isLoading && overview.rows.length === 0 ? (
+          <div className="px-5 py-2">
+            <SkeletonRow />
+            <SkeletonRow />
+            <SkeletonRow />
           </div>
         ) : scheduled.length === 0 ? (
           <div className="px-5 py-8 text-center">
@@ -83,12 +85,13 @@ export function TodayRoster() {
           </div>
         ) : (
           <ul className="divide-y divide-charcoal-3">
-            {scheduled.map((r) => {
+            {scheduled.map((r, i) => {
               const display = displayAttendanceState(r.state);
               return (
                 <li
                   key={r.employee_id}
-                  className="px-5 py-3 flex items-center justify-between gap-3"
+                  style={{ animationDelay: `${Math.min(i * 30, 300)}ms` }}
+                  className="px-5 py-3 flex items-center justify-between gap-3 animate-stagger-in"
                 >
                   <div className="min-w-0">
                     <div className="text-sm text-off-white truncate">

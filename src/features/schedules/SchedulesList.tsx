@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-
+import { SkeletonRow } from '@/components/ui/Skeleton';
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
 import { Card, CardBody, CardHeader, CardTitle } from '@/components/ui/Card';
@@ -73,9 +73,11 @@ export function SchedulesList() {
             <CardTitle>Schedules</CardTitle>
           </CardHeader>
           <CardBody className="p-0">
-            {loading && schedules.length === 0 ? (
-              <div className="py-10 text-center text-sm text-muted-gray">
-                Loading…
+                        {loading && schedules.length === 0 ? (
+              <div className="px-5 py-2">
+                <SkeletonRow />
+                <SkeletonRow />
+                <SkeletonRow />
               </div>
             ) : filtered.length === 0 ? (
               <div className="py-10 text-center text-sm text-muted-gray">

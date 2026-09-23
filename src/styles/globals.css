@@ -7,28 +7,31 @@
    ============================================================ */
 
 @theme {
-  /* Brand palette */
-  --color-near-black: #08090a;
-  --color-charcoal: #151718;
-  --color-charcoal-2: #1e2122;
-  --color-charcoal-3: #26292a;
-  --color-charcoal-4: #3a3d3e;
-  --color-off-white: #f4f4f0;
-  --color-lime: #b8ff00;
-  --color-lime-dim: #9cd600;
-  --color-muted-gray: #929797;
+  /* BARS 8 brand palette — deep burgundy ground, bright red accent,
+     cream typography. The legacy `lime` token name is retained because
+     ~30 components reference `bg-lime` / `text-lime` / `border-lime`;
+     its value is now the brand red. */
+  --color-near-black: #3d0817;
+  --color-charcoal: #4a0a1c;
+  --color-charcoal-2: #5c0d24;
+  --color-charcoal-3: #7a1d3a;
+  --color-charcoal-4: #8f2d4a;
+  --color-off-white: #f0e6d6;
+  --color-lime: #dc2626;
+  --color-lime-dim: #b91c1c;
+  --color-muted-gray: #b08898;
 
-  /* Status */
-  --color-success: #4ade80;
-  --color-warning: #fbbf24;
-  --color-danger: #f87171;
-  --color-info: #60a5fa;
+  /* Status — tuned for the burgundy base */
+  --color-success: #7bc47f;
+  --color-warning: #e0b350;
+  --color-danger: #ff6b6b;
+  --color-info: #8ab4f0;
 
-  /* Typography */
+  /* Typography — unchanged */
   --font-heading: 'Space Grotesk', system-ui, -apple-system, sans-serif;
   --font-body: 'Inter', system-ui, -apple-system, sans-serif;
 
-  /* Radii */
+  /* Radii — unchanged */
   --radius-sm: 4px;
   --radius-md: 8px;
   --radius-lg: 12px;
@@ -113,6 +116,7 @@
     *::before,
     *::after {
       animation-duration: 0.01ms !important;
+      animation-delay: 0ms !important;
       animation-iteration-count: 1 !important;
       transition-duration: 0.01ms !important;
       scroll-behavior: auto !important;
@@ -205,5 +209,35 @@
 
   .animate-skeleton {
     animation: skeleton-pulse 1.6s ease-in-out infinite;
+  }
+    /* Staggered list entrance — set animation-delay per item via inline style. */
+  @keyframes stagger-in {
+    from {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-stagger-in {
+    animation: stagger-in 260ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  /* Soft pulse for live states (ON_BREAK badge, etc.) */
+  @keyframes pulse-soft {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.7;
+    }
+  }
+
+  .animate-pulse-soft {
+    animation: pulse-soft 2000ms ease-in-out infinite;
   }
 }

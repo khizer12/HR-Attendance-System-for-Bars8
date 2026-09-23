@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-
+import { SkeletonRow } from '@/components/ui/Skeleton';
 import { Button } from '@/components/ui/Button';
 import { Card, CardBody, CardHeader, CardTitle } from '@/components/ui/Card';
 import {
@@ -63,10 +63,14 @@ export function AdminDashboard() {
             counts={counts}
           />
         </CardHeader>
-        <CardBody className="p-0">
+                <CardBody className="p-0">
           {loading && rows.length === 0 ? (
-            <div className="py-10 text-center text-sm text-muted-gray">
-              Loading…
+            <div className="px-5 py-2">
+              <SkeletonRow />
+              <SkeletonRow />
+              <SkeletonRow />
+              <SkeletonRow />
+              <SkeletonRow />
             </div>
           ) : (
             <div className="px-5 pb-2">
