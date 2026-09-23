@@ -14,6 +14,7 @@ import Schedule from '@/pages/Schedule';
 import Settings from '@/pages/Settings';
 import Unauthorized from '@/pages/Unauthorized';
 import EmployeeDetail from '@/pages/EmployeeDetail';
+import Race from '@/pages/Race';
 
 export default function App() {
   return (
@@ -38,6 +39,7 @@ export default function App() {
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="attendance" element={<Attendance />} />
             <Route path="schedule" element={<Schedule />} />
+            <Route path="race" element={<Race />} />
 
             {/* Admin-only pages */}
             <Route
