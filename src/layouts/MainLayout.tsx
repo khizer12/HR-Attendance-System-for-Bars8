@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 
+import { SkipLink } from '@/components/SkipLink';
 import { Header } from '@/layouts/Header';
 import { Sidebar } from '@/layouts/Sidebar';
 import { cn } from '@/utils/cn';
@@ -20,6 +21,8 @@ export function MainLayout() {
 
   return (
     <div className="flex h-screen bg-near-black overflow-hidden">
+      <SkipLink />
+
       <aside className="hidden lg:flex shrink-0">
         <Sidebar />
       </aside>
@@ -32,7 +35,7 @@ export function MainLayout() {
         />
       )}
 
-            <aside
+      <aside
         className={cn(
           'fixed inset-y-0 left-0 z-50 lg:hidden transition-transform duration-200 ease-out',
           mobileOpen ? 'translate-x-0' : '-translate-x-full',
@@ -45,7 +48,7 @@ export function MainLayout() {
       <div className="flex-1 flex flex-col min-w-0">
         <Header onOpenMobileNav={() => setMobileOpen(true)} title={title} />
 
-                <main className="flex-1 overflow-y-auto bg-grid">
+        <main id="main-content" className="flex-1 overflow-y-auto bg-grid">
           <div key={pathname} className="animate-page-in">
             <Outlet />
           </div>

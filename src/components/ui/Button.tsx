@@ -5,7 +5,7 @@ import { cn } from '@/utils/cn';
 
 const buttonVariants = cva(
   // Base styles — always applied
-    'inline-flex items-center justify-center gap-2 rounded-md font-medium ' +
+  'inline-flex items-center justify-center gap-2 rounded-md font-medium ' +
     'transition-all duration-150 ease-out ' +
     'hover:-translate-y-px ' +
     'active:scale-[0.97] active:translate-y-0 ' +
@@ -15,13 +15,15 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        primary: 'bg-lime text-off-white hover:bg-lime-dim',
+        // Cream-on-red fails WCAG AA (3.5:1). Ink-on-red passes (5.0:1).
+        primary: 'bg-lime text-ink hover:bg-lime-dim',
         secondary:
           'bg-charcoal-2 text-off-white border border-charcoal-3 hover:bg-charcoal-3',
         ghost: 'text-off-white hover:bg-charcoal-2',
-        danger: 'bg-danger text-near-black hover:opacity-90',
+        // Coral danger is bright; ink reads fine on it too.
+        danger: 'bg-danger text-ink hover:opacity-90',
         outline:
-          'bg-transparent text-lime border border-lime hover:bg-lime hover:text-off-white',
+          'bg-transparent text-lime border border-lime hover:bg-lime hover:text-ink',
       },
       size: {
         sm: 'h-8 px-3 text-xs',

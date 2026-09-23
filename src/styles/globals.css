@@ -20,6 +20,8 @@
   --color-lime: #dc2626;
   --color-lime-dim: #b91c1c;
   --color-muted-gray: #b08898;
+    /* Dark ink for text on the red primary button (cream-on-red fails WCAG AA). */
+  --color-ink: #0a0207;
 
   /* Status — tuned for the burgundy base */
   --color-success: #7bc47f;

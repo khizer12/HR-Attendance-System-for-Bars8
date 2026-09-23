@@ -9,11 +9,16 @@ interface AuditLogTableProps {
   error: string | null;
 }
 
-function actionTone(action: string): 'lime' | 'info' | 'warning' | 'danger' | 'neutral' {
-  if (action.includes('created')) return 'lime';
+function actionTone(
+  action: string,
+): 'lime' | 'info' | 'warning' | 'danger' | 'neutral' {
+  // `deleted` takes precedence over `created` — matches longer prefix first.
   if (action.includes('deleted')) return 'danger';
   if (action.includes('deactivated')) return 'warning';
   if (action.includes('role_changed')) return 'warning';
+  // Creates use info-blue: distinct from deletes (danger), doesn't
+  // collide with the primary CTA red.
+  if (action.includes('created')) return 'info';
   if (action.includes('updated')) return 'info';
   return 'neutral';
 }
