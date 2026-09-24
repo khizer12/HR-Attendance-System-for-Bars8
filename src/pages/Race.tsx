@@ -19,7 +19,7 @@ export default function Race() {
   const { profile: user } = useAuth();
   const { profile: racing, save: saveRacing } = useRacingProfile();
   const { tracks, loading: dataLoading } = useRacingData();
-  const { participants, loading: racersLoading } = useRaceParticipants();
+  const { participants, loading: racersLoading, live } = useRaceParticipants();
 
   const [pickerOpen, setPickerOpen] = useState(false);
   const [pickerSaving, setPickerSaving] = useState(false);
@@ -81,11 +81,31 @@ export default function Race() {
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
           <h2 className="font-heading text-2xl">Race</h2>
-          <p className="text-muted-gray text-sm mt-1">
-            {currentTrack
-              ? `${currentTrack.name} · ${currentTrack.country}`
-              : 'Loading circuit…'}
-          </p>
+                    <div className="flex items-center gap-2 mt-1">
+            <p className="text-muted-gray text-sm">
+              {currentTrack
+                ? `${currentTrack.name} · ${currentTrack.country}`
+                : 'Loading circuit…'}
+            </p>
+            <span
+              aria-label={live ? 'Live' : 'Disconnected'}
+              className={[
+                'inline-flex items-center gap-1.5 text-[10px] uppercase tracking-wider font-medium',
+                live ? 'text-lime' : 'text-muted-gray',
+              ].join(' ')}
+            >
+              <span
+                aria-hidden="true"
+                className={[
+                  'h-1.5 w-1.5 rounded-full',
+                  live
+                    ? 'bg-lime animate-pulse-soft'
+                    : 'bg-muted-gray',
+                ].join(' ')}
+              />
+              {live ? 'Live' : 'Offline'}
+            </span>
+          </div>
         </div>
 
         <div className="flex flex-wrap items-center gap-2">
