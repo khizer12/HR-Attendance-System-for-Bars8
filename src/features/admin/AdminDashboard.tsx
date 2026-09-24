@@ -1,7 +1,8 @@
 import { useMemo, useState } from 'react';
-import { SkeletonRow } from '@/components/ui/Skeleton';
+
 import { Button } from '@/components/ui/Button';
 import { Card, CardBody, CardHeader, CardTitle } from '@/components/ui/Card';
+import { SkeletonRow } from '@/components/ui/Skeleton';
 import {
   AdminFilters,
   AdminStats,
@@ -11,6 +12,7 @@ import {
   useAdminOverview,
   type AdminFilter,
 } from '@/features/admin';
+import { TodayStandingsCard } from '@/features/racing';
 import { formatTimeLong } from '@/lib/time';
 
 export function AdminDashboard() {
@@ -63,7 +65,7 @@ export function AdminDashboard() {
             counts={counts}
           />
         </CardHeader>
-                <CardBody className="p-0">
+        <CardBody className="p-0">
           {loading && rows.length === 0 ? (
             <div className="px-5 py-2">
               <SkeletonRow />
@@ -79,6 +81,8 @@ export function AdminDashboard() {
           )}
         </CardBody>
       </Card>
+
+      <TodayStandingsCard />
     </div>
   );
 }

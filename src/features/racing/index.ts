@@ -43,3 +43,4 @@ export type { UseLeaderboardResult } from '@/features/racing/useLeaderboard';
 
 export { LeaderboardTabs } from '@/features/racing/LeaderboardTabs';
 export { LeaderboardTable } from '@/features/racing/LeaderboardTable';
+export { TodayStandingsCard } from '@/features/racing/TodayStandingsCard';
