@@ -5,16 +5,21 @@ import { Card, CardBody, CardHeader, CardTitle } from '@/components/ui/Card';
 import { useAuth } from '@/features/auth';
 import {
   CarPickerModal,
+  LeaderboardTable,
+  LeaderboardTabs,
   RpmMeter,
   Speedometer,
   TrackCanvas,
+  useDubaiWeather,
+  useLeaderboard,
   useRaceParticipants,
   useRacingData,
   useRacingProfile,
+  WEATHER_LABEL,
+  type LeaderboardRange,
 } from '@/features/racing';
 import { secondsBetween } from '@/lib/time';
 import { useNow } from '@/hooks/useNow';
-import { useDubaiWeather, WEATHER_LABEL } from '@/features/racing';
 
 export default function Race() {
   const { profile: user } = useAuth();
@@ -28,6 +33,15 @@ export default function Race() {
   const [pickerError, setPickerError] = useState<string | null>(null);
   const [cameraFollow, setCameraFollow] = useState(true);
   const [zoomLevel, setZoomLevel] = useState(2);
+  const [lbRange, setLbRange] = useState<LeaderboardRange>('daily');
+
+  const {
+    rows: lbRows,
+    loading: lbLoading,
+    error: lbError,
+    weeklyWeekStart,
+    weeklyWeekEnd,
+  } = useLeaderboard(lbRange);
 
   // One tick per second drives the needle smoothly.
   const now = useNow(1000, true);
@@ -83,13 +97,13 @@ export default function Race() {
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
           <h2 className="font-heading text-2xl">Race</h2>
-                    <div className="flex items-center gap-2 mt-1">
+          <div className="flex flex-wrap items-center gap-3 mt-1">
             <p className="text-muted-gray text-sm">
               {currentTrack
                 ? `${currentTrack.name} · ${currentTrack.country}`
                 : 'Loading circuit…'}
             </p>
-                        <span
+            <span
               aria-label={live ? 'Live' : 'Disconnected'}
               className={[
                 'inline-flex items-center gap-1.5 text-[10px] uppercase tracking-wider font-medium',
@@ -100,9 +114,7 @@ export default function Race() {
                 aria-hidden="true"
                 className={[
                   'h-1.5 w-1.5 rounded-full',
-                  live
-                    ? 'bg-lime animate-pulse-soft'
-                    : 'bg-muted-gray',
+                  live ? 'bg-lime animate-pulse-soft' : 'bg-muted-gray',
                 ].join(' ')}
               />
               {live ? 'Live' : 'Offline'}
@@ -110,7 +122,10 @@ export default function Race() {
 
             {weather && (
               <span className="inline-flex items-center gap-1.5 text-[10px] uppercase tracking-wider font-medium text-muted-gray">
-                <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-info" />
+                <span
+                  aria-hidden="true"
+                  className="h-1.5 w-1.5 rounded-full bg-info"
+                />
                 Dubai · {Math.round(weather.temperature)}°C ·{' '}
                 {WEATHER_LABEL[weather.condition]}
               </span>
@@ -234,7 +249,33 @@ export default function Race() {
         </CardBody>
       </Card>
 
-            <p className="text-[10px] text-muted-gray text-right">
+      <Card>
+        <CardHeader className="flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <CardTitle>Leaderboard</CardTitle>
+            <p className="text-xs text-muted-gray mt-1">
+              Ranked by work time + deposit boost
+            </p>
+          </div>
+          <LeaderboardTabs current={lbRange} onChange={setLbRange} />
+        </CardHeader>
+        <CardBody className="p-0">
+          <LeaderboardTable
+            rows={lbRows}
+            loading={lbLoading}
+            error={lbError}
+            selfId={user?.id ?? null}
+            weeklyMode={lbRange === 'weekly'}
+            rangeLabel={
+              lbRange === 'weekly' && weeklyWeekStart && weeklyWeekEnd
+                ? `${weeklyWeekStart} → ${weeklyWeekEnd}`
+                : undefined
+            }
+          />
+        </CardBody>
+      </Card>
+
+      <p className="text-[10px] text-muted-gray text-right">
         Weather data by{' '}
         <a
           href="https://open-meteo.com/"

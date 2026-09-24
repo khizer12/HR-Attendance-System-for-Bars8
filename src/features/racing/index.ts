@@ -28,3 +28,18 @@ export type { UseDubaiWeatherResult } from '@/features/racing/useDubaiWeather';
 export { WeatherOverlay } from '@/features/racing/WeatherOverlay';
 export type { WeatherSnapshot, WeatherCondition } from '@/features/racing/weather';
 export { WEATHER_LABEL } from '@/features/racing/weather';
+export {
+  fetchLeaderboard,
+  fetchWeeklySnapshot,
+} from '@/features/racing/leaderboardApi';
+export type {
+  LeaderboardRange,
+  LeaderboardRow,
+  WeeklySnapshot,
+} from '@/features/racing/leaderboardApi';
+
+export { useLeaderboard } from '@/features/racing/useLeaderboard';
+export type { UseLeaderboardResult } from '@/features/racing/useLeaderboard';
+
+export { LeaderboardTabs } from '@/features/racing/LeaderboardTabs';
+export { LeaderboardTable } from '@/features/racing/LeaderboardTable';
