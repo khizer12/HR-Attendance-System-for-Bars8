@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 
 import { angleAt, pointAt, samplePath, type SampledPath } from '@/features/racing/geometry';
+import { WeatherOverlay } from '@/features/racing/WeatherOverlay';
+import type { WeatherCondition } from '@/features/racing/weather';
 import type { RaceParticipant, RacingTrack } from '@/types/racing';
 
 interface TrackCanvasProps {
@@ -12,8 +14,12 @@ interface TrackCanvasProps {
   selfId: string | null;
   /** Whether the camera should follow the user's car. */
   cameraFollow: boolean;
-  /** 1 = fit whole track, 2 = zoom 2x, 3 = zoom 3x. */
+    /** 1 = fit whole track, 2 = zoom 2x, 3 = zoom 3x. */
   zoomLevel: number;
+  /** Optional weather condition; if provided, renders an overlay. */
+  weatherCondition?: WeatherCondition;
+  /** Whether it's daytime in Dubai. */
+  weatherIsDay?: boolean;
 }
 
 const VIEWBOX_W = 1000;
@@ -26,6 +32,8 @@ export function TrackCanvas({
   selfId,
   cameraFollow,
   zoomLevel,
+  weatherCondition,
+  weatherIsDay = true,
 }: TrackCanvasProps) {
   const pathRef = useRef<SVGPathElement | null>(null);
   const [sample, setSample] = useState<SampledPath | null>(null);
@@ -57,8 +65,14 @@ export function TrackCanvas({
   const viewBoxX = Math.max(0, Math.min(VIEWBOX_W - w, cx - w / 2));
   const viewBoxY = Math.max(0, Math.min(VIEWBOX_H - h, cy - h / 2));
 
-  return (
+    return (
     <div className="relative rounded-lg overflow-hidden border border-charcoal-3 bg-near-black">
+      {weatherCondition && (
+        <WeatherOverlay
+          condition={weatherCondition}
+          isDay={weatherIsDay}
+        />
+      )}
       <svg
         viewBox={`${viewBoxX} ${viewBoxY} ${w} ${h}`}
         className="w-full h-auto"

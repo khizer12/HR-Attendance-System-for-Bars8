@@ -14,12 +14,14 @@ import {
 } from '@/features/racing';
 import { secondsBetween } from '@/lib/time';
 import { useNow } from '@/hooks/useNow';
+import { useDubaiWeather, WEATHER_LABEL } from '@/features/racing';
 
 export default function Race() {
   const { profile: user } = useAuth();
   const { profile: racing, save: saveRacing } = useRacingProfile();
   const { tracks, loading: dataLoading } = useRacingData();
   const { participants, loading: racersLoading, live } = useRaceParticipants();
+  const { weather } = useDubaiWeather();
 
   const [pickerOpen, setPickerOpen] = useState(false);
   const [pickerSaving, setPickerSaving] = useState(false);
@@ -87,7 +89,7 @@ export default function Race() {
                 ? `${currentTrack.name} · ${currentTrack.country}`
                 : 'Loading circuit…'}
             </p>
-            <span
+                        <span
               aria-label={live ? 'Live' : 'Disconnected'}
               className={[
                 'inline-flex items-center gap-1.5 text-[10px] uppercase tracking-wider font-medium',
@@ -105,6 +107,14 @@ export default function Race() {
               />
               {live ? 'Live' : 'Offline'}
             </span>
+
+            {weather && (
+              <span className="inline-flex items-center gap-1.5 text-[10px] uppercase tracking-wider font-medium text-muted-gray">
+                <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-info" />
+                Dubai · {Math.round(weather.temperature)}°C ·{' '}
+                {WEATHER_LABEL[weather.condition]}
+              </span>
+            )}
           </div>
         </div>
 
@@ -155,6 +165,8 @@ export default function Race() {
           selfId={user?.id ?? null}
           cameraFollow={cameraFollow}
           zoomLevel={zoomLevel}
+          weatherCondition={weather?.condition}
+          weatherIsDay={weather?.is_day ?? true}
         />
       )}
 
@@ -221,6 +233,18 @@ export default function Race() {
           )}
         </CardBody>
       </Card>
+
+            <p className="text-[10px] text-muted-gray text-right">
+        Weather data by{' '}
+        <a
+          href="https://open-meteo.com/"
+          target="_blank"
+          rel="noreferrer"
+          className="underline hover:text-off-white transition-colors"
+        >
+          Open-Meteo
+        </a>
+      </p>
 
       {pickerOpen && (
         <CarPickerModal

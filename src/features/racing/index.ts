@@ -22,3 +22,9 @@ export type { UseRaceParticipantsResult } from '@/features/racing/useRacePartici
 export { TrackCanvas } from '@/features/racing/TrackCanvas';
 export { Speedometer } from '@/features/racing/Speedometer';
 export { RpmMeter } from '@/features/racing/RpmMeter';
+export { useDubaiWeather } from '@/features/racing/useDubaiWeather';
+export type { UseDubaiWeatherResult } from '@/features/racing/useDubaiWeather';
+
+export { WeatherOverlay } from '@/features/racing/WeatherOverlay';
+export type { WeatherSnapshot, WeatherCondition } from '@/features/racing/weather';
+export { WEATHER_LABEL } from '@/features/racing/weather';
