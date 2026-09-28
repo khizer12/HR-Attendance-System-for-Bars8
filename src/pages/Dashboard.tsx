@@ -3,13 +3,12 @@ import { useAttendanceContext } from '@/features/attendance';
 import { AdminDashboard } from '@/features/admin';
 import {
   AttendanceHistory,
-  EmployeeVerificationsCard,
   QuickStats,
   ScheduleCard,
   StatusCard,
 } from '@/features/dashboard';
 import { formatDateLong, greetingForNow } from '@/lib/time';
-
+import { EmployeeVerificationsCard } from '@/features/dashboard';
 export default function Dashboard() {
   const { profile, isSuperAdmin, isSubAdmin } = useAuth();
 

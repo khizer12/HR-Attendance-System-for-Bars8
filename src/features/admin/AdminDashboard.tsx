@@ -12,7 +12,6 @@ import {
   useAdminOverview,
   type AdminFilter,
 } from '@/features/admin';
-import { TodayStandingsCard } from '@/features/racing';
 import { formatTimeLong } from '@/lib/time';
 
 export function AdminDashboard() {
@@ -81,8 +80,6 @@ export function AdminDashboard() {
           )}
         </CardBody>
       </Card>
-
-      <TodayStandingsCard />
     </div>
   );
 }
