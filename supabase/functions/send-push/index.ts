@@ -1,21 +1,31 @@
 import { createClient } from 'jsr:@supabase/supabase-js@2';
 import webpush from 'npm:web-push@3.6.7';
 
-interface NoticeRow {
-  id: string;
+interface PushPayload {
   title: string;
   body: string;
+  url?: string;
+  tag?: string;
+}
+
+interface WebhookBody {
+  /** Which table triggered this — 'notices' or 'leave_requests'. */
+  source: 'notices' | 'leave_requests';
+  /** Row ID from the source table — used as the tag for dedup. */
+  record_id: string;
+  /** Explicit list of user IDs to notify. */
+  target_user_ids: string[];
+  /** Content of the notification. */
+  payload: PushPayload;
 }
 
 Deno.serve(async (req) => {
   try {
-    const payload = await req.json();
+    const body: WebhookBody = await req.json();
 
-    if (payload.type !== 'INSERT' || !payload.record) {
-      return new Response('Not an INSERT — ignoring', { status: 200 });
+    if (!body.target_user_ids || body.target_user_ids.length === 0) {
+      return new Response('No targets', { status: 200 });
     }
-
-    const notice: NoticeRow = payload.record;
 
     const supabaseUrl = Deno.env.get('SUPABASE_URL');
     const serviceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
@@ -35,22 +45,23 @@ Deno.serve(async (req) => {
 
     const { data: subs, error: subsError } = await admin
       .from('push_subscriptions')
-      .select('id, user_id, endpoint, p256dh, auth');
+      .select('id, user_id, endpoint, p256dh, auth')
+      .in('user_id', body.target_user_ids);
 
     if (subsError) {
       return new Response(`Failed to load subs: ${subsError.message}`, { status: 500 });
     }
 
     if (!subs || subs.length === 0) {
-      return new Response('No subscriptions', { status: 200 });
+      return new Response('No subscriptions for targets', { status: 200 });
     }
 
     const pushPayload = JSON.stringify({
-      title: `Notice: ${notice.title}`,
-      body: notice.body.slice(0, 180),
+      title: body.payload.title,
+      body: body.payload.body,
       icon: '/favicon.svg',
-      tag: `notice-${notice.id}`,
-      data: { url: '/notices' },
+      tag: body.payload.tag ?? `${body.source}-${body.record_id}`,
+      data: { url: body.payload.url ?? '/dashboard' },
     });
 
     const deadIds: string[] = [];
