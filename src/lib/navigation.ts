@@ -18,6 +18,12 @@ export const navItems: NavItem[] = [
     icon: '◷',
     roles: ['super_admin', 'sub_admin', 'employee'],
   },
+    {
+    to: '/notices',
+    label: 'Notices',
+    icon: '◰',
+    roles: ['super_admin', 'sub_admin', 'employee'],
+  },
   {
     to: '/schedule',
     label: 'Schedule',

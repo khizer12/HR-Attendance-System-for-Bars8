@@ -14,6 +14,7 @@ import Schedule from '@/pages/Schedule';
 import Settings from '@/pages/Settings';
 import Unauthorized from '@/pages/Unauthorized';
 import EmployeeDetail from '@/pages/EmployeeDetail';
+import Notices from '@/pages/Notices';
 
 export default function App() {
   return (
@@ -37,6 +38,7 @@ export default function App() {
             <Route index element={<Navigate to="/dashboard" replace />} />
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="attendance" element={<Attendance />} />
+            <Route path="notices" element={<Notices />} />
             <Route path="schedule" element={<Schedule />} />
 
             {/* Admin-only pages */}
