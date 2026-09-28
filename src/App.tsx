@@ -9,6 +9,7 @@ import Dashboard from '@/pages/Dashboard';
 import Employees from '@/pages/Employees';
 import Login from '@/pages/Login';
 import NotFound from '@/pages/NotFound';
+import MyPayslips from '@/pages/MyPayslips';
 import Reports from '@/pages/Reports';
 import Schedule from '@/pages/Schedule';
 import Settings from '@/pages/Settings';
@@ -41,6 +42,7 @@ export default function App() {
             <Route index element={<Navigate to="/dashboard" replace />} />
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="attendance" element={<Attendance />} />
+            <Route path="payslips" element={<MyPayslips />} />
             <Route path="notices" element={<Notices />} />
             <Route path="leaves" element={<Leaves />} />
             <Route path="schedule" element={<Schedule />} />

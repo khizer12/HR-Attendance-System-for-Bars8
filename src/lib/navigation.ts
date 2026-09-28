@@ -19,6 +19,12 @@ export const navItems: NavItem[] = [
     roles: ['super_admin', 'sub_admin', 'employee'],
   },
     {
+    to: '/payslips',
+    label: 'My payslips',
+    icon: '◫',
+    roles: ['super_admin', 'sub_admin', 'employee'],
+  },
+    {
     to: '/leaves',
     label: 'Leaves',
     icon: '◐',

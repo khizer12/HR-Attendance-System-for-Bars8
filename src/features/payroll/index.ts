@@ -45,3 +45,10 @@ export {
   payrollFilename,
   downloadCsv,
 } from '@/features/payroll/payrollCsv';
+export { useMyPayslips } from '@/features/payroll/useMyPayslips';
+export type {
+  PayslipWithRun,
+  UseMyPayslipsResult,
+} from '@/features/payroll/useMyPayslips';
+
+export { PayslipDetailModal } from '@/features/payroll/PayslipDetailModal';
