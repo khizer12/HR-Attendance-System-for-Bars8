@@ -9,6 +9,7 @@ import {
 } from '@/features/dashboard';
 import { formatDateLong, greetingForNow } from '@/lib/time';
 import { EmployeeVerificationsCard } from '@/features/dashboard';
+import { RecentNoticesCard } from '@/features/notices';
 export default function Dashboard() {
   const { profile, isSuperAdmin, isSubAdmin } = useAuth();
 
@@ -58,12 +59,14 @@ function EmployeeDashboard({
         </div>
       </div>
 
-            <AttendanceHistory
+                  <AttendanceHistory
         records={attendance.history}
         loading={attendance.loading}
       />
 
       <EmployeeVerificationsCard />
+
+      <RecentNoticesCard />
     </div>
   );
 }
