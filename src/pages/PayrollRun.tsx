@@ -257,8 +257,12 @@ export default function PayrollRun() {
                       <td className="py-3 pr-3 tabular-nums text-off-white">
                         {money(it.bonus_amount)}
                       </td>
-                      <td className="py-3 pr-3 tabular-nums text-off-white">
-                        {money(it.absence_deduction + (it.late_waived ? 0 : it.late_deduction))}
+                                            <td className="py-3 pr-3 tabular-nums text-off-white">
+                        {money(
+                          it.absence_deduction +
+                            (it.late_waived ? 0 : it.late_deduction) +
+                            it.manual_deduction,
+                        )}
                       </td>
                       <td className="py-3 pr-5 tabular-nums text-right text-off-white font-medium">
                         {money(it.net_pay)}
