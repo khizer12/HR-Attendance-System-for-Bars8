@@ -13,6 +13,7 @@ import Reports from '@/pages/Reports';
 import Schedule from '@/pages/Schedule';
 import Settings from '@/pages/Settings';
 import Unauthorized from '@/pages/Unauthorized';
+import Leaves from '@/pages/Leaves';
 import EmployeeDetail from '@/pages/EmployeeDetail';
 import Notices from '@/pages/Notices';
 
@@ -39,6 +40,7 @@ export default function App() {
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="attendance" element={<Attendance />} />
             <Route path="notices" element={<Notices />} />
+            <Route path="leaves" element={<Leaves />} />
             <Route path="schedule" element={<Schedule />} />
 
             {/* Admin-only pages */}
