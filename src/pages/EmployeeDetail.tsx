@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { EmployeeVerificationLog } from '@/features/location';
+import { SalaryCard } from '@/features/payroll';
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
 import { Card, CardBody, CardHeader, CardTitle } from '@/components/ui/Card';
@@ -145,7 +146,7 @@ export default function EmployeeDetail() {
           </CardBody>
         </Card>
       </div>
-
+      <SalaryCard employeeId={employee.id} />
       <EmployeeVerificationLog employeeId={employee.id} />
 
       {callerProfile && (
