@@ -103,7 +103,19 @@ export default function EmployeeDetail() {
             <CardTitle>Profile</CardTitle>
           </CardHeader>
           <CardBody className="space-y-3 text-sm">
-            <Row label="Employee ID" value={employee.id} mono />
+                        <Row label="Employee ID" value={employee.id} mono />
+            <Row
+              label="Joined"
+              value={
+                employee.joining_date
+                  ? new Date(employee.joining_date).toLocaleDateString('en-GB', {
+                      day: 'numeric',
+                      month: 'short',
+                      year: 'numeric',
+                    })
+                  : '—'
+              }
+            />
             <Row
               label="Created"
               value={new Date(employee.created_at).toLocaleDateString('en-GB')}
