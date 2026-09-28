@@ -50,3 +50,16 @@ export interface CreateLeaveInput {
   end_date: string;
   reason: string;
 }
+export interface Holiday {
+  id: string;
+  name: string;
+  date: string; // YYYY-MM-DD
+  description: string | null;
+  created_at: string;
+}
+
+export interface HolidayInput {
+  name: string;
+  date: string;
+  description?: string | null;
+}

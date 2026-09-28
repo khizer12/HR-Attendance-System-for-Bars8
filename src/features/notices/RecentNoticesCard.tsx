@@ -61,6 +61,6 @@ export function RecentNoticesCard() {
           </ul>
         )}
       </CardBody>
-    </Card>
+    </Card> 
   );
 }   

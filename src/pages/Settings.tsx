@@ -1,5 +1,5 @@
 import { OfficeLocationsList } from '@/features/settings';
-
+import { HolidayList } from '@/features/leaves';
 export default function Settings() {
   return (
     <div className="p-6 lg:p-8 space-y-6 max-w-5xl">
@@ -11,7 +11,7 @@ export default function Settings() {
       </div>
 
       <OfficeLocationsList />
-
+      <HolidayList />
       <div className="rounded-lg border border-charcoal-3 bg-charcoal/40 p-5">
         <p className="text-xs text-muted-gray">
           Attendance defaults, company profile, and system timezone arrive in a

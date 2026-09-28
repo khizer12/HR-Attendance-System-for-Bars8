@@ -20,3 +20,15 @@ export { LeaveBalanceCard } from '@/features/leaves/LeaveBalanceCard';
 export { LeaveRequestList } from '@/features/leaves/LeaveRequestList';
 export { LeaveApprovalPanel } from '@/features/leaves/LeaveApprovalPanel';
 export { PendingApprovalsCard } from '@/features/leaves/PendingApprovalsCard';
+export {
+  createHoliday,
+  deleteHoliday,
+  listHolidays,
+  updateHoliday,
+} from '@/features/leaves/holidayApi';
+
+export { useHolidays } from '@/features/leaves/useHolidays';
+export type { UseHolidaysResult } from '@/features/leaves/useHolidays';
+
+export { HolidayList } from '@/features/leaves/HolidayList';
+export { HolidayModal } from '@/features/leaves/HolidayModal';
