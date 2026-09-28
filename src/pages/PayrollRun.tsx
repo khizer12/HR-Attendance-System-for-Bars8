@@ -7,6 +7,7 @@ import { Card, CardBody, CardHeader, CardTitle } from '@/components/ui/Card';
 import { SkeletonRow } from '@/components/ui/Skeleton';
 import { useAuth } from '@/features/auth';
 import {
+  BonusUploadModal,
   EditItemModal,
   calculateRun,
   updateRunStatus,
@@ -59,6 +60,7 @@ export default function PayrollRun() {
   const [busy, setBusy] = useState(false);
   const [actionError, setActionError] = useState<string | null>(null);
   const [editing, setEditing] = useState<PayrollItem | null>(null);
+    const [bonusOpen, setBonusOpen] = useState(false);
 
   const editable =
     run?.status === 'draft' || run?.status === 'pending_approval';
@@ -138,7 +140,16 @@ export default function PayrollRun() {
           )}
         </div>
 
-        <div className="flex flex-wrap gap-2">
+                <div className="flex flex-wrap gap-2">
+          {editable && (
+            <Button
+              variant="secondary"
+              size="sm"
+              onClick={() => setBonusOpen(true)}
+            >
+              Upload bonuses
+            </Button>
+          )}
           {editable && (
             <Button
               variant="secondary"
@@ -276,12 +287,19 @@ export default function PayrollRun() {
         </CardBody>
       </Card>
 
-      <EditItemModal
+            <EditItemModal
         open={editing !== null}
         item={editing}
         canWaiveLate={isSuperAdmin}
         onClose={() => setEditing(null)}
         onSaved={() => void refresh()}
+      />
+
+      <BonusUploadModal
+        open={bonusOpen}
+        runId={run.id}
+        onClose={() => setBonusOpen(false)}
+        onApplied={() => void refresh()}
       />
     </div>
   );

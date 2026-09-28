@@ -33,3 +33,10 @@ export { useRunItems } from '@/features/payroll/useRunItems';
 export type { UseRunItemsResult } from '@/features/payroll/useRunItems';
 
 export { EditItemModal } from '@/features/payroll/EditItemModal';
+export { parseBonusFile, applyBonuses } from '@/features/payroll/bonusUpload';
+export type {
+  BonusUploadResult,
+  BonusUploadRow,
+} from '@/features/payroll/bonusUpload';
+
+export { BonusUploadModal } from '@/features/payroll/BonusUploadModal';
