@@ -5,6 +5,7 @@ import { Card, CardBody, CardHeader, CardTitle } from '@/components/ui/Card';
 import { SkeletonRow } from '@/components/ui/Skeleton';
 import { useAuth } from '@/features/auth';
 import {
+  LeaveApprovalPanel,
   LeaveBalanceCard,
   LeaveRequestList,
   LeaveRequestModal,
@@ -112,6 +113,8 @@ export default function Leaves() {
           <LeaveBalanceCard balances={balances} />
         </div>
       </div>
+
+      {isAdmin && <LeaveApprovalPanel />}
 
       <LeaveRequestModal
         open={composerOpen}

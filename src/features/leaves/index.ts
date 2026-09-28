@@ -18,3 +18,4 @@ export type { UseAdminLeaveRequestsResult } from '@/features/leaves/useAdminLeav
 export { LeaveRequestModal } from '@/features/leaves/LeaveRequestModal';
 export { LeaveBalanceCard } from '@/features/leaves/LeaveBalanceCard';
 export { LeaveRequestList } from '@/features/leaves/LeaveRequestList';
+export { LeaveApprovalPanel } from '@/features/leaves/LeaveApprovalPanel';
