@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-
+import { PendingApprovalsCard } from '@/features/leaves';
 import { Button } from '@/components/ui/Button';
 import { Card, CardBody, CardHeader, CardTitle } from '@/components/ui/Card';
 import { SkeletonRow } from '@/components/ui/Skeleton';
@@ -80,6 +80,7 @@ export function AdminDashboard() {
           )}
         </CardBody>
       </Card>
+      <PendingApprovalsCard />
     </div>
   );
 }
