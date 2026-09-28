@@ -10,13 +10,13 @@ import {
   BonusUploadModal,
   EditItemModal,
   calculateRun,
+  downloadCsv,
+  payrollFilename,
+  payrollItemsToCsv,
   updateRunStatus,
   useRunItems,
 } from '@/features/payroll';
-import type {
-  PayrollItem,
-  PayrollRunStatus,
-} from '@/types/payroll';
+import type { PayrollItem, PayrollRunStatus } from '@/types/payroll';
 import { formatDateShort } from '@/lib/time';
 
 const STATUS_VARIANT: Record<
@@ -60,7 +60,7 @@ export default function PayrollRun() {
   const [busy, setBusy] = useState(false);
   const [actionError, setActionError] = useState<string | null>(null);
   const [editing, setEditing] = useState<PayrollItem | null>(null);
-    const [bonusOpen, setBonusOpen] = useState(false);
+  const [bonusOpen, setBonusOpen] = useState(false);
 
   const editable =
     run?.status === 'draft' || run?.status === 'pending_approval';
@@ -111,6 +111,12 @@ export default function PayrollRun() {
     { net: 0 },
   );
 
+  function handleExportCsv() {
+    if (!run || items.length === 0) return;
+    const csv = payrollItemsToCsv(run, items);
+    downloadCsv(payrollFilename(run), csv);
+  }
+
   return (
     <div className="p-6 lg:p-8 space-y-6 max-w-6xl">
       <div>
@@ -140,7 +146,16 @@ export default function PayrollRun() {
           )}
         </div>
 
-                <div className="flex flex-wrap gap-2">
+        <div className="flex flex-wrap gap-2">
+          <Button
+            variant="secondary"
+            size="sm"
+            onClick={handleExportCsv}
+            disabled={items.length === 0}
+          >
+            Export CSV
+          </Button>
+
           {editable && (
             <Button
               variant="secondary"
@@ -150,6 +165,7 @@ export default function PayrollRun() {
               Upload bonuses
             </Button>
           )}
+
           {editable && (
             <Button
               variant="secondary"
@@ -165,18 +181,22 @@ export default function PayrollRun() {
               Recalculate
             </Button>
           )}
+
           {run.status === 'draft' && (
             <Button
               variant="primary"
               size="sm"
               loading={busy}
               onClick={() =>
-                void runAction(() => updateRunStatus(run.id, 'pending_approval'))
+                void runAction(() =>
+                  updateRunStatus(run.id, 'pending_approval'),
+                )
               }
             >
               Submit for approval
             </Button>
           )}
+
           {run.status === 'pending_approval' && isSuperAdmin && (
             <Button
               variant="primary"
@@ -189,6 +209,7 @@ export default function PayrollRun() {
               Approve
             </Button>
           )}
+
           {run.status === 'approved' && isSuperAdmin && (
             <Button
               variant="primary"
@@ -218,7 +239,7 @@ export default function PayrollRun() {
           <div>
             <CardTitle>Payslips</CardTitle>
             <p className="text-xs text-muted-gray mt-1">
-              {items.length} {items.length === 1 ? 'payslip' : 'payslips'} ·{' '}
+              {items.length} {items.length === 1 ? 'payslip' : 'payslips'} ·
               Total net {money(totals.net)}
             </p>
           </div>
@@ -227,8 +248,8 @@ export default function PayrollRun() {
           {items.length === 0 ? (
             <div className="py-10 text-center">
               <p className="text-sm text-muted-gray">
-                No payslips yet. Click <strong>Recalculate</strong> to
-                generate them.
+                No payslips yet. Click <strong>Recalculate</strong> to generate
+                them.
               </p>
             </div>
           ) : (
@@ -237,9 +258,15 @@ export default function PayrollRun() {
                 <thead>
                   <tr className="text-left text-xs text-muted-gray border-b border-charcoal-3">
                     <th className="font-medium py-2.5 px-5">Employee</th>
-                    <th className="font-medium py-2.5 pr-3 tabular-nums">Days</th>
-                    <th className="font-medium py-2.5 pr-3 tabular-nums">Base</th>
-                    <th className="font-medium py-2.5 pr-3 tabular-nums">Bonus</th>
+                    <th className="font-medium py-2.5 pr-3 tabular-nums">
+                      Days
+                    </th>
+                    <th className="font-medium py-2.5 pr-3 tabular-nums">
+                      Base
+                    </th>
+                    <th className="font-medium py-2.5 pr-3 tabular-nums">
+                      Bonus
+                    </th>
                     <th className="font-medium py-2.5 pr-3 tabular-nums">
                       Deductions
                     </th>
@@ -268,7 +295,7 @@ export default function PayrollRun() {
                       <td className="py-3 pr-3 tabular-nums text-off-white">
                         {money(it.bonus_amount)}
                       </td>
-                                            <td className="py-3 pr-3 tabular-nums text-off-white">
+                      <td className="py-3 pr-3 tabular-nums text-off-white">
                         {money(
                           it.absence_deduction +
                             (it.late_waived ? 0 : it.late_deduction) +
@@ -287,7 +314,7 @@ export default function PayrollRun() {
         </CardBody>
       </Card>
 
-            <EditItemModal
+      <EditItemModal
         open={editing !== null}
         item={editing}
         canWaiveLate={isSuperAdmin}

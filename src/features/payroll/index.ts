@@ -40,3 +40,8 @@ export type {
 } from '@/features/payroll/bonusUpload';
 
 export { BonusUploadModal } from '@/features/payroll/BonusUploadModal';
+export {
+  payrollItemsToCsv,
+  payrollFilename,
+  downloadCsv,
+} from '@/features/payroll/payrollCsv';
