@@ -1,15 +1,13 @@
 import { supabase } from '@/lib/supabase';
 import type { CreateNoticeInput, NoticeWithAuthor } from '@/types/notice';
 
-const JOINED_COLUMNS = `
-  id, author_id, title, body, pinned, created_at, updated_at,
-  author:profiles!notices_author_id_fkey ( full_name, email )
-`;
+const NOTICE_COLUMNS =
+  'id, author_id, author_full_name, title, body, pinned, created_at, updated_at';
 
 export async function listNotices(limit = 100): Promise<NoticeWithAuthor[]> {
   const { data, error } = await supabase
     .from('notices')
-    .select(JOINED_COLUMNS)
+    .select(NOTICE_COLUMNS)
     .order('pinned', { ascending: false })
     .order('created_at', { ascending: false })
     .limit(limit);
@@ -19,15 +17,15 @@ export async function listNotices(limit = 100): Promise<NoticeWithAuthor[]> {
   type Raw = {
     id: string;
     author_id: string;
+    author_full_name: string;
     title: string;
     body: string;
     pinned: boolean;
     created_at: string;
     updated_at: string;
-    author: { full_name: string; email: string } | null;
   };
 
-  return ((data ?? []) as unknown as Raw[]).map((row) => ({
+  return ((data ?? []) as Raw[]).map((row) => ({
     id: row.id,
     author_id: row.author_id,
     title: row.title,
@@ -35,8 +33,8 @@ export async function listNotices(limit = 100): Promise<NoticeWithAuthor[]> {
     pinned: row.pinned,
     created_at: row.created_at,
     updated_at: row.updated_at,
-    author_full_name: row.author?.full_name ?? 'Former admin',
-    author_email: row.author?.email ?? '',
+    author_full_name: row.author_full_name,
+    author_email: '', // No longer used; kept on the type for backward compat.
   }));
 }
 
@@ -47,6 +45,9 @@ export async function createNotice(input: CreateNoticeInput): Promise<void> {
 
   const { error } = await supabase.from('notices').insert({
     author_id: uid,
+    // The DB trigger fills this in, but we set it here too so the
+    // insert doesn't need to round-trip for the value.
+    author_full_name: '',
     title: input.title.trim(),
     body: input.body.trim(),
     pinned: input.pinned,
