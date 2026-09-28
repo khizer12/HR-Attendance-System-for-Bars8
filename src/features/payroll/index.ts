@@ -52,3 +52,8 @@ export type {
 } from '@/features/payroll/useMyPayslips';
 
 export { PayslipDetailModal } from '@/features/payroll/PayslipDetailModal';
+export { usePayrollSettings } from '@/features/payroll/usePayrollSettings';
+export type { UsePayrollSettingsResult } from '@/features/payroll/usePayrollSettings';
+
+export { PayrollSettingsCard } from '@/features/payroll/PayrollSettingsCard';
+export { BonusTiersCard } from '@/features/payroll/BonusTiersCard';

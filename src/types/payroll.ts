@@ -44,6 +44,7 @@ export interface PayrollSettings {
   default_late_mode: 'flat' | 'waived';
   default_late_flat_amount: number;
   default_currency: PayrollCurrency;
+  usd_to_aed_rate: number;
   updated_at: string;
   updated_by: string | null;
 }

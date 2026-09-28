@@ -13,8 +13,7 @@ const BONUS_TIER_COLUMNS =
   'id, from_usd, to_usd, bonus_percent, sort_order, active, created_at, updated_at';
 
 const PAYROLL_SETTINGS_COLUMNS =
-  'id, default_absence_mode, default_absence_flat_amount, default_late_mode, default_late_flat_amount, default_currency, updated_at, updated_by';
-
+  'id, default_absence_mode, default_absence_flat_amount, default_late_mode, default_late_flat_amount, default_currency, usd_to_aed_rate, updated_at, updated_by';
 /**
  * Fetch the currently active salary structure for an employee.
  * `effective_to is null` means it's the live row.
@@ -116,6 +115,7 @@ export interface UpdatePayrollSettingsInput {
   default_late_mode?: 'flat' | 'waived';
   default_late_flat_amount?: number;
   default_currency?: 'AED' | 'USDT';
+  usd_to_aed_rate?: number;
 }
 
 export async function updatePayrollSettings(
