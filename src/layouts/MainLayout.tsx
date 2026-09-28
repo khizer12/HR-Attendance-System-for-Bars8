@@ -6,6 +6,11 @@ import { Header } from '@/layouts/Header';
 import { Sidebar } from '@/layouts/Sidebar';
 import { cn } from '@/utils/cn';
 import { navItems } from '@/lib/navigation';
+import {
+  NotificationPrompt,
+  useNoticeNotifications,
+  useNotificationPermission,
+} from '@/features/notifications';
 
 function usePageTitle(): string {
   const { pathname } = useLocation();
@@ -18,6 +23,9 @@ export function MainLayout() {
   const title = usePageTitle();
   const { pathname } = useLocation();
   const closeMobile = () => setMobileOpen(false);
+
+  const { permission } = useNotificationPermission();
+  useNoticeNotifications(permission);
 
   return (
     <div className="flex h-screen bg-near-black overflow-hidden">
@@ -47,6 +55,7 @@ export function MainLayout() {
 
       <div className="flex-1 flex flex-col min-w-0">
         <Header onOpenMobileNav={() => setMobileOpen(true)} title={title} />
+        <NotificationPrompt />
 
         <main id="main-content" className="flex-1 overflow-y-auto bg-grid">
           <div key={pathname} className="animate-page-in">
