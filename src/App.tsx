@@ -17,6 +17,7 @@ import Leaves from '@/pages/Leaves';
 import EmployeeDetail from '@/pages/EmployeeDetail';
 import Payroll from '@/pages/Payroll';
 import Notices from '@/pages/Notices';
+import PayrollRun from '@/pages/PayrollRun';
 
 export default function App() {
   return (
@@ -75,6 +76,14 @@ export default function App() {
               element={
                 <ProtectedRoute allowRoles={['super_admin', 'sub_admin']}>
                   <Payroll />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="payroll/:id"
+              element={
+                <ProtectedRoute allowRoles={['super_admin', 'sub_admin']}>
+                  <PayrollRun />
                 </ProtectedRoute>
               }
             />

@@ -29,3 +29,7 @@ export { usePayrollRuns } from '@/features/payroll/usePayrollRuns';
 export type { UsePayrollRunsResult } from '@/features/payroll/usePayrollRuns';
 
 export { CreateRunModal } from '@/features/payroll/CreateRunModal';
+export { useRunItems } from '@/features/payroll/useRunItems';
+export type { UseRunItemsResult } from '@/features/payroll/useRunItems';
+
+export { EditItemModal } from '@/features/payroll/EditItemModal';
